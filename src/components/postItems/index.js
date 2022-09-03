@@ -1,11 +1,13 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View, Image } from 'react-native';
+import { Text, View, Image, Pressable } from 'react-native';
 import styles from "./styles";
+import { useNavigation } from "@react-navigation/native"
 
 const PostItems = () => {
+  const navigation = useNavigation();
     return (
-        <View style={styles.container}>
-        <StatusBar style="auto" backgroundColor='#fec85c60' />
+        <Pressable onPress={() => {
+          navigation.navigate('PostDetails');
+        }} style={styles.container}>
           <View style={styles.postWrap}>
           <Image source={{uri: "https://picsum.photos/200/300"}} style={styles.postImage}></Image>
           <View style={styles.postContainWrap}>
@@ -16,7 +18,7 @@ const PostItems = () => {
             <Text style={styles.priceTag}>$100 / Day</Text>
           </View>
           </View>
-        </View>
+        </Pressable>
     )
 }
 

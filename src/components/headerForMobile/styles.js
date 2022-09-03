@@ -30,6 +30,16 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
         paddingVertical: 10
+    },
+
+    location_text: {
+        fontWeight: 'bold', 
+        marginLeft: 5
+    },
+
+    cat_text: {
+        fontWeight: 'bold', 
+        marginLeft: 5
     }
   });
 

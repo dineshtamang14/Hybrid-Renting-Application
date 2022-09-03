@@ -2,7 +2,7 @@ import { View, Text, TextInput } from 'react-native';
 import styles from "./styles"
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 
-const Header = () => {
+const HeaderForMobile = () => {
   return(
     <>
     <View style={styles.header}>
@@ -14,12 +14,12 @@ const Header = () => {
     <View style={{flexDirection: 'row'}}>
     <MaterialIcons name="location-on" size={24} color="black" />
       <Text>Location</Text>
-      <Text style={{fontWeight: 'bold', marginLeft: 5}}>Mumbai</Text>
+      <Text style={styles.location_text}>Mumbai</Text>
     </View>
     <View style={{flexDirection: 'row'}}>
     <MaterialIcons name="settings-input-composite" size={20} color="black" />
       <Text style={{marginLeft: 5}}>Category</Text>
-      <Text style={{fontWeight: 'bold', marginLeft: 5}}>Vehicle</Text>
+      <Text style={styles.cat_text}>Vehicle</Text>
     </View>
     </View>
   </View>
@@ -27,4 +27,4 @@ const Header = () => {
   )
 }
 
-export default Header;
+export default HeaderForMobile;
