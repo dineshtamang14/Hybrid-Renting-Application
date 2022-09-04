@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
 import Home from "../screens/Home"
 import PostDetails from "../screens/postDetails";
+import SelectPhotosScreen from "../screens/selectPhotos";
 import BottomTabNav from "./BottomTabNavigator";
 
 const Route = () => {
@@ -16,6 +17,7 @@ const Route = () => {
         }}>
             <stack.Screen name="Home" component={BottomTabNav} options={{headerShown: false}} />
             <stack.Screen name="PostDetails" component={PostDetails} options={{headerShown: false}} />
+            <stack.Screen name="SelectPhotos" component={SelectPhotosScreen} options={{headerShown: false}} />
         </stack.Navigator>
     </NavigationContainer>
   );
