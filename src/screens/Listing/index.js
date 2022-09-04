@@ -9,10 +9,11 @@ import React, { useEffect, useState } from 'react';
 
 const Listing = () => {
     const navigation = useNavigation();
+    const [category, setCategory] = useState({catID: 0, catName: "Category"});
     Auth.currentAuthenticatedUser()
         .then((user) => {
             console.log("email id: ", user.attributes.email);
-            console.log("userid: ", user.attributes.sub);
+            //console.log("userid: ", user.attributes.sub);
         })
         .catch((err) => {
             console.log(err);
@@ -28,7 +29,8 @@ const Listing = () => {
         } else {
             if(route.params.imageData !== undefined){
                 setImageData(route.params.imageData);
-                console.log(imageData);
+            } else if(route.params.catID !== undefined){
+                setCategory(route.params);
             }
         }
     })
@@ -58,13 +60,16 @@ const Listing = () => {
                 </ScrollView>
             </View>
 
-            <View style={styles.listing_cat}>
+            <Pressable style={styles.listing_cat} onPress={() => {
+                navigationContainer("SelectCategory");
+            }}>
             <View style={{ flexDirection: 'row', alignItems: "center"}}>
             <MaterialIcons name="settings-input-composite" size={20} color={colors.secondary} />
-                <Text style={{ fontSize: 16, color: colors.secondary, marginLeft: 5}}>Category</Text>
+                <Text style={{ fontSize: 16, color: colors.secondary, marginLeft: 5}}>{category.catName}</Text>
             </View>
                 <AntDesign name="right" size={24} color={colors.secondary} />
-            </View>
+            </Pressable>
+
             <View style={styles.listing_cat}>
             <View style={{ flexDirection: 'row', alignItems: "center"}}>
             <MaterialCommunityIcons name="map-marker" size={24} color={colors.secondary} />
