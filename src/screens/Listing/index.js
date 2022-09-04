@@ -1,10 +1,11 @@
-import { View, Text, Pressable, TextInput } from 'react-native';
+import { View, Text, Pressable, TextInput, ScrollView, Image } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native'
 import { Auth } from "aws-amplify";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { colors } from '../../modal/color';
 import styles from "./styles";
-import {  useNavigation } from "@react-navigation/native"
+import {  useNavigation, useRoute } from "@react-navigation/native"
+import React, { useEffect, useState } from 'react';
 
 const Listing = () => {
     const navigation = useNavigation();
@@ -17,6 +18,21 @@ const Listing = () => {
             console.log(err);
             throw err;
         })
+
+        const [imageData, setImageData] = useState([]);
+        const route = useRoute();
+
+        useEffect(() => {
+        if(!route.params){
+            console.log("There is no data in route");
+        } else {
+            if(route.params.imageData !== undefined){
+                setImageData(route.params.imageData);
+                console.log(imageData);
+            }
+        }
+    })
+        // Auth.signOut();
   return (
         <View style={{ margin: 10 }}>
             <View>
@@ -29,7 +45,17 @@ const Listing = () => {
             </View>
 
             <View>
-                
+                <ScrollView horizontal={true}>
+                {imageData && imageData.map((component, index) => (
+                    <Image key={component.id} source={{uri: component.uri}} style={{
+                        height:100, 
+                        width: 100,
+                        marginBottom: 20,
+                        marginTop: -20,
+                        marginRight: 5
+                    }} />
+                ))}
+                </ScrollView>
             </View>
 
             <View style={styles.listing_cat}>
@@ -66,5 +92,5 @@ const Listing = () => {
   );
 }
 
-//export default withAuthenticator(Listing);
-export default Listing;
+export default withAuthenticator(Listing);
+//export default Listing;
