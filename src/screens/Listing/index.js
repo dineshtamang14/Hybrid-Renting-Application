@@ -10,6 +10,10 @@ import React, { useEffect, useState } from 'react';
 const Listing = () => {
     const navigation = useNavigation();
     const [category, setCategory] = useState({catID: 0, catName: "Category"});
+    const [location, setLocation] = useState({locID: 0, locName: "Location"});
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [rentValue, setRentValue] = useState("");
     Auth.currentAuthenticatedUser()
         .then((user) => {
             console.log("email id: ", user.attributes.email);
@@ -31,6 +35,8 @@ const Listing = () => {
                 setImageData(route.params.imageData);
             } else if(route.params.catID !== undefined){
                 setCategory(route.params);
+            } else if(route.params.locID !== undefined){
+                setLocation(route.params);
             }
         }
     })
@@ -53,7 +59,7 @@ const Listing = () => {
                         height:100, 
                         width: 100,
                         marginBottom: 20,
-                        marginTop: -20,
+                        marginTop: -50,
                         marginRight: 5
                     }} />
                 ))}
@@ -61,7 +67,7 @@ const Listing = () => {
             </View>
 
             <Pressable style={styles.listing_cat} onPress={() => {
-                navigationContainer("SelectCategory");
+                navigation.navigate("SelectCategory");
             }}>
             <View style={{ flexDirection: 'row', alignItems: "center"}}>
             <MaterialIcons name="settings-input-composite" size={20} color={colors.secondary} />
@@ -70,24 +76,31 @@ const Listing = () => {
                 <AntDesign name="right" size={24} color={colors.secondary} />
             </Pressable>
 
-            <View style={styles.listing_cat}>
+            <Pressable style={styles.listing_cat} onPress={() => {
+                navigation.navigate("SelectLocation");
+            }}>
             <View style={{ flexDirection: 'row', alignItems: "center"}}>
             <MaterialCommunityIcons name="map-marker" size={24} color={colors.secondary} />
-                <Text style={{ fontSize: 16, color: colors.secondary, marginLeft: 5}}>Location</Text>
+                <Text style={{ fontSize: 16, color: colors.secondary, marginLeft: 5}}>{location.locName}</Text>
             </View>
                 <AntDesign name="right" size={24} color={colors.secondary} />
-            </View>
+            </Pressable>
+
             <View style={styles.inputText}>
                 <MaterialIcons name="title" size={24} color={colors.secondary} />
-                <TextInput placeholder="Adv Title" />
+                <TextInput placeholder="Adv Title" style={{ width: "100%"}} onChangeText={(text) => {
+                    setTitle(text)
+                }} />
             </View>
             <View style={styles.inputText}>
                 <MaterialIcons name="description" size={24} color={colors.secondary} />
-                <TextInput placeholder="write a description" style={{ marginLeft: 5 }} />
+                <TextInput placeholder="write a description" style={{ marginLeft: 5, width: "100%" }} onChangeText={(text) => {
+                    setDescription(text)
+                }} multiline={true} numberOfLines={3} />
             </View>
             <View style={[styles.inputText, { width: "50%" }]}>
                 <FontAwesome name="rupee" size={24} color={colors.secondary} />
-                <TextInput placeholder="Add a value" style={{ marginLeft: 5 }} />
+                <TextInput placeholder="Add a value" style={{ marginLeft: 5, width: "100%" }} onChangeText={(text) => setRentValue(text)} keyboardType="number-pad" />
             </View>
 
             <View style={styles.post_adv}>
