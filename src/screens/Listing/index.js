@@ -6,6 +6,8 @@ import { colors } from '../../modal/color';
 import styles from "./styles";
 import {  useNavigation, useRoute } from "@react-navigation/native"
 import React, { useEffect, useState } from 'react';
+import "react-native-get-random-values"
+import {v4 as uuidv4} from "uuid";
 
 const Listing = () => {
     const navigation = useNavigation();
@@ -40,6 +42,18 @@ const Listing = () => {
             }
         }
     })
+    const imageAllUrl = [];
+    const storeToDB = async () => {
+        imageData && imageData.map( async(component, index) => {
+            const imageUrl = component.uri;
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            const urlParts = imageUrl.split(".");
+            const extension = urlParts[urlParts.length - 1];
+            const key = `${uuidv4()}.${extension}`;
+            imageAllUrl.push({imageUrl:key});
+        })
+    }
         // Auth.signOut();
   return (
         <View style={{ margin: 10 }}>
@@ -103,9 +117,11 @@ const Listing = () => {
                 <TextInput placeholder="Add a value" style={{ marginLeft: 5, width: "100%" }} onChangeText={(text) => setRentValue(text)} keyboardType="number-pad" />
             </View>
 
-            <View style={styles.post_adv}>
+            <Pressable style={styles.post_adv} onPress={() => {
+                storeToDB()
+            }} android_ripple={{color: "grey"}}>
                 <Text style={styles.post_adv_text}>POST ADV</Text>
-            </View>
+            </Pressable>
         </View>
   );
 }
