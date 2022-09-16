@@ -139,6 +139,22 @@ const PostDetails = () => {
               <Text style={{ color: colors.grey }}>A month</Text>
             </View>
           </View>
+          <View style={{ margin: 10 }}>
+            <Text style={{ color: colors.secondary, fontWeight: "bold" }}>
+              Preferred Meetup Location
+            </Text>
+            <Text style={{ color: colors.secondary }}>
+              {route.params.postInfo.locationName}
+            </Text>
+          </View>
+          <View style={{ margin: 10 }}>
+            <Text style={{ color: colors.secondary, fontWeight: "bold" }}>
+              Description
+            </Text>
+            <Text style={{ color: colors.secondary }}>
+              {route.params.postInfo.description}
+            </Text>
+          </View>
     </View>
   );
 };
