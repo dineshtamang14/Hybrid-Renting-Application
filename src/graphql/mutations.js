@@ -15,6 +15,7 @@ export const createListing = /* GraphQL */ `
       images
       locationID
       locationName
+      rentValue
       userID
       commonID
       createdAt
@@ -37,6 +38,7 @@ export const updateListing = /* GraphQL */ `
       images
       locationID
       locationName
+      rentValue
       userID
       commonID
       createdAt
@@ -59,6 +61,7 @@ export const deleteListing = /* GraphQL */ `
       images
       locationID
       locationName
+      rentValue
       userID
       commonID
       createdAt

@@ -1,0 +1,16 @@
+{
+  "resourceName": "rentproject",
+  "policyUUID": "8f91e550",
+  "bucketName": "rentbucket",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}

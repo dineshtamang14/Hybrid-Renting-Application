@@ -1,23 +1,27 @@
-type Listing 
-@model 
-@auth(
-  rules: [
-    {allow:owner}
-    {allow:public, operations:[read], provider: iam}
-    {allow: private, provider: userPools}
-  ]
-)
-
-{
+type Listing
+  @model
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, operations: [read], provider: iam }
+      { allow: private, provider: userPools }
+    ]
+  ) {
   id: ID!
   title: String!
-  categoryName: String 
+  categoryName: String
   categoryID: String
   description: String
   images: String
   locationID: String
   locationName: String
+  rentValue: String
   userID: ID
-  commonID: String @index(name:"listingByCreatedAt" sortKeyFields:["createdAt"] queryField: "getListingByCreatedAt")
+  commonID: String
+    @index(
+      name: "listingByCreatedAt"
+      sortKeyFields: ["createdAt"]
+      queryField: "getListingByCreatedAt"
+    )
   createdAt: AWSDateTime
 }

@@ -1,6 +1,6 @@
 import { View, Text, Pressable, TextInput, ScrollView, Image } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native'
-import { Auth } from "aws-amplify";
+import { Auth, Storage, API, graphqlOperation } from "aws-amplify";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { colors } from '../../modal/color';
 import styles from "./styles";
@@ -8,6 +8,7 @@ import {  useNavigation, useRoute } from "@react-navigation/native"
 import React, { useEffect, useState } from 'react';
 import "react-native-get-random-values"
 import {v4 as uuidv4} from "uuid";
+import { createListing } from "../../graphql/mutations";
 
 const Listing = () => {
     const navigation = useNavigation();
@@ -16,10 +17,13 @@ const Listing = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [rentValue, setRentValue] = useState("");
+    const [userID, setUserID] = useState("");
+
     Auth.currentAuthenticatedUser()
         .then((user) => {
             console.log("email id: ", user.attributes.email);
             //console.log("userid: ", user.attributes.sub);
+            setUserID(user.attributes.sub);
         })
         .catch((err) => {
             console.log(err);
@@ -52,11 +56,32 @@ const Listing = () => {
             const extension = urlParts[urlParts.length - 1];
             const key = `${uuidv4()}.${extension}`;
             imageAllUrl.push({imageUrl:key});
+            await Storage.put(key, blob);
+            if(imageData.length == index+1){
+                const postData = {
+                    title: title,
+                    categoryName: category.catName,
+                    categoryID: category.catID,
+                    description: description,
+                    images: JSON.stringify(imageAllUrl),
+                    locationID: location.locID,
+                    locationName: location.locName,
+                    rentValue: rentValue,
+                    userID: userID,
+                    commonID: "1"
+                }
+
+                await API.graphql({
+                    query: createListing,
+                    variables: { input: postData },
+                    authMode: "AMAZON_COGNITO_USER_POOLS",
+                });
+            }
         })
     }
         // Auth.signOut();
   return (
-        <View style={{ margin: 10 }}>
+        <ScrollView style={{ margin: 10 }}>
             <View>
                 <Text style={{ marginTop: 10 }}>Upload images [Max 5 photos]</Text>
                 <Pressable style={styles.listing_imgupload} onPress={() => {
@@ -122,7 +147,7 @@ const Listing = () => {
             }} android_ripple={{color: "grey"}}>
                 <Text style={styles.post_adv_text}>POST ADV</Text>
             </Pressable>
-        </View>
+        </ScrollView>
   );
 }
 
