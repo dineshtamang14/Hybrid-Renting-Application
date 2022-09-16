@@ -20,6 +20,7 @@ type Listing
   images: String
   locationID: String
   locationName: String
+  ownerEmail: String
   rentValue: String
   userID: ID
   commonID: String

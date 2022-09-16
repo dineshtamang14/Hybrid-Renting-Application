@@ -1,13 +1,146 @@
-import { View, Text } from 'react-native';
-
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  Dimensions,
+} from "react-native";
+import { colors } from "../../modal/color";
+import { useNavigation, useRoute } from "@react-navigation/native";
 const PostDetails = () => {
-  return (
-    <>
-        <View>
-            <Text>Hello</Text>
-        </View>
-    </>
+  const windowWidth = Number(Dimensions.get("window").width);
+  const route = useRoute();
+  const navigation = useNavigation();
+
+  const [images, setImages] = useState(
+    JSON.parse(route.params.postInfo.images)
   );
-}
+
+  const [lenderUserEmail, setLenderUserEmail] = useState(
+    route.params.postInfo.ownerEmail
+  );
+  const substrEmail = lenderUserEmail.substr(0, lenderUserEmail.indexOf("@"));
+
+  return (
+        <View
+          style={{
+            width: windowWidth > 800 ? "80%" : "100%",
+            backgroundColor:
+              windowWidth > 800 ? colors.white : colors.backgroundColor,
+          }}>
+          <ScrollView horizontal={true}>
+            {images &&
+              images.map((data, index) => (
+                <Image
+                  source={{
+                    uri:
+                      "https://d3qz0eunla69v9.cloudfront.net/fit-in/400x400/public/" +
+                      images[index].imageUrl,
+                  }}
+                  style={{
+                    height: 320,
+                    width: 380,
+                    marginRight: 10,
+                  }}
+                  key={index}
+                />
+              ))}
+          </ScrollView>
+          <Text
+            style={{
+              marginLeft: 10,
+              fontSize: 30,
+              fontWeight: "bold",
+              marginRight: 10,
+              marginTop: 30,
+              color: colors.secondary,
+            }}>
+            {route.params.postInfo.title}
+          </Text>
+          <View
+            style={{
+              margin: 10,
+              flexDirection: "row",
+              alignItems: "center",
+              marginTop: 20,
+              marginBottom: 20,
+            }}>
+            <View
+              style={{
+                backgroundColor: colors.secondary,
+                height: 50,
+                width: 50,
+                justifyContent: "center",
+                alignItems: "center",
+                borderRadius: 50,
+                paddingRight: 5,
+                marginRight: 10,
+              }}>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  fontSize: 20,
+                  color: colors.primary,
+                }}>
+                {" "}
+                {substrEmail.charAt(0).toUpperCase()}
+              </Text>
+            </View>
+            <View>
+              <Text style={{ color: colors.grey }}>Owned by</Text>
+              <Text style={{ fontSize: 15, fontWeight: "bold" }}>
+                {substrEmail}
+              </Text>
+            </View>
+          </View>
+          <View
+            style={{
+              margin: 10,
+              flexDirection: "row",
+              justifyContent: "space-around",
+              borderTopWidth: 1,
+              borderTopColor: "lightgrey",
+              borderBottomWidth: 1,
+              borderBottomColor: "lightgrey",
+              paddingVertical: 20,
+            }}>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  color: colors.secondary,
+                }}>
+                ₹ {route.params.postInfo.rentValue}
+              </Text>
+              <Text style={{ color: colors.grey }}>A day</Text>
+            </View>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  color: colors.secondary,
+                }}>
+                ₹ {route.params.postInfo.rentValue * 7}
+              </Text>
+              <Text style={{ color: colors.grey }}>A week</Text>
+            </View>
+            <View style={{ justifyContent: "center", alignItems: "center" }}>
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  color: colors.secondary,
+                }}>
+                ₹ {route.params.postInfo.rentValue * 30}
+              </Text>
+              <Text style={{ color: colors.grey }}>A month</Text>
+            </View>
+          </View>
+    </View>
+  );
+};
 
 export default PostDetails;

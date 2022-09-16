@@ -12,12 +12,12 @@ export const getListing = /* GraphQL */ `
       images
       locationID
       locationName
+      ownerEmail
       rentValue
       userID
       commonID
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -37,12 +37,12 @@ export const listListings = /* GraphQL */ `
         images
         locationID
         locationName
+        ownerEmail
         rentValue
         userID
         commonID
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
@@ -74,12 +74,12 @@ export const getListingByCreatedAt = /* GraphQL */ `
         images
         locationID
         locationName
+        ownerEmail
         rentValue
         userID
         commonID
         createdAt
         updatedAt
-        owner
       }
       nextToken
     }
