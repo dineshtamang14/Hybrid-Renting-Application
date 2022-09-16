@@ -3,7 +3,8 @@ import { colors } from '../../modal/color';
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+      //flex: 1,
+      marginBottom: 10,
     },
   
     postImage: {
@@ -25,7 +26,8 @@ const styles = StyleSheet.create({
       shadowOffset: {width: 0, height: 1},
       shadowOpacity: 0.8,
       shadowRadius: 1,
-      elevation: 5
+      elevation: 5,
+      overflow: "hidden"
     }, 
   
     postContainWrap: {

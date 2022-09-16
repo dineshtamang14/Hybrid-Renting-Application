@@ -2,7 +2,9 @@ import { Text, View, Image, Pressable } from 'react-native';
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native"
 
-const PostItems = () => {
+const PostItems = (props) => {
+  const singlePost = props.posts;
+ 
   const navigation = useNavigation();
     return (
         <Pressable onPress={() => {
@@ -12,10 +14,10 @@ const PostItems = () => {
           <Image source={{uri: "https://picsum.photos/200/300"}} style={styles.postImage}></Image>
           <View style={styles.postContainWrap}>
             <View>
-              <Text style={styles.postTitle}>Taj Hotel</Text>
-              <Text style={styles.postPlace}>Mumbai</Text>
+              <Text style={styles.postTitle}>{singlePost.title}</Text>
+              <Text style={styles.postPlace}>{singlePost.locationName}</Text>
             </View>
-            <Text style={styles.priceTag}>$100 / Day</Text>
+            <Text style={styles.priceTag}>₹{singlePost.rentValue} / Day</Text>
           </View>
           </View>
         </Pressable>

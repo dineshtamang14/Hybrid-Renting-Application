@@ -50,7 +50,7 @@ export const listListings = /* GraphQL */ `
 `;
 export const getListingByCreatedAt = /* GraphQL */ `
   query GetListingByCreatedAt(
-    $commonID: String!
+    $commonID: String
     $createdAt: ModelStringKeyConditionInput
     $sortDirection: ModelSortDirection
     $filter: ModelListingFilterInput

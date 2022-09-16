@@ -1,6 +1,6 @@
-import { View, Text, Pressable, TextInput, ScrollView, Image } from 'react-native';
+import { View, Text, Pressable, TextInput, ScrollView, Image, Alert } from 'react-native';
 import { withAuthenticator } from 'aws-amplify-react-native'
-import { Auth, Storage, API, graphqlOperation } from "aws-amplify";
+import { Auth, Storage, API } from "aws-amplify";
 import { AntDesign, MaterialIcons, MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 import { colors } from '../../modal/color';
 import styles from "./styles";
@@ -18,6 +18,21 @@ const Listing = () => {
     const [description, setDescription] = useState("");
     const [rentValue, setRentValue] = useState("");
     const [userID, setUserID] = useState("");
+    const [postProcessing, setPostProcessing] = useState(false);
+    const [postSuccess, setPostSuccess] = useState("");
+
+    useEffect(() => {
+        if(postSuccess !== ""){
+        setPostProcessing(false);
+        Alert.alert(
+            'Success',
+            postSuccess,
+            [
+                { text: 'OK', onPress: () => navigation.navigate("Home", {screen: "Explore"}) }
+            ]
+        )
+        }
+    }, [postSuccess])
 
     Auth.currentAuthenticatedUser()
         .then((user) => {
@@ -48,6 +63,7 @@ const Listing = () => {
     })
     const imageAllUrl = [];
     const storeToDB = async () => {
+        setPostProcessing(true);
         imageData && imageData.map( async(component, index) => {
             const imageUrl = component.uri;
             const response = await fetch(imageUrl);
@@ -57,6 +73,7 @@ const Listing = () => {
             const key = `${uuidv4()}.${extension}`;
             imageAllUrl.push({imageUrl:key});
             await Storage.put(key, blob);
+            
             if(imageData.length == index+1){
                 const postData = {
                     title: title,
@@ -76,6 +93,8 @@ const Listing = () => {
                     variables: { input: postData },
                     authMode: "AMAZON_COGNITO_USER_POOLS",
                 });
+                setPostProcessing(false);
+                setPostSuccess("Your adv have successfully published.");
             }
         })
     }
@@ -145,7 +164,7 @@ const Listing = () => {
             <Pressable style={styles.post_adv} onPress={() => {
                 storeToDB()
             }} android_ripple={{color: "grey"}}>
-                <Text style={styles.post_adv_text}>POST ADV</Text>
+                <Text style={styles.post_adv_text}>{postProcessing ? "Processing..." : "POST ADV"}</Text>
             </Pressable>
         </ScrollView>
   );
