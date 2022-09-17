@@ -8,6 +8,9 @@ import {
 } from "react-native";
 import { colors } from "../../modal/color";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import HeaderForDesktop from "../../components/headerForDesktop";
+import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
+
 const PostDetails = () => {
   const windowWidth = Number(Dimensions.get("window").width);
   const route = useRoute();
@@ -17,12 +20,16 @@ const PostDetails = () => {
     JSON.parse(route.params.postInfo.images)
   );
 
+  const [menuToggle, setMenuToggle] = useState(false);
   const [lenderUserEmail, setLenderUserEmail] = useState(
     route.params.postInfo.ownerEmail
   );
   const substrEmail = lenderUserEmail.substr(0, lenderUserEmail.indexOf("@"));
 
   return (
+    <View style={{ flex: 1, position: "relative" }}>
+    <HeaderForDesktop setMenuToggle={setMenuToggle} menuToggle={menuToggle} />
+    <View style={{ alignItems: "center" }}>
         <View
           style={{
             width: windowWidth > 800 ? "80%" : "100%",
@@ -155,6 +162,9 @@ const PostDetails = () => {
               {route.params.postInfo.description}
             </Text>
           </View>
+        </View>
+      </View>
+      <MenuDetailsForDesktop menuToggle={menuToggle} top={59} right={"7.8%"} />
     </View>
   );
 };
