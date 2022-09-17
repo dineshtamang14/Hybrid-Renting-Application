@@ -3,16 +3,18 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { colors } from "../modal/color";
 import Home from "../screens/Home";
 import Listing from "../screens/Listing";
-import PostDetails from "../screens/postDetails";
+import { Dimensions } from "react-native";
 
 const BottomTabNav = () => {
+    const windowWidth = Number(Dimensions.get("window").width);
+
     const Tab = createBottomTabNavigator();
 
   return (
     <Tab.Navigator screenOptions={{ 
         //tabBarActiveBackgroundColor: colors.primary, 
         tabBarActiveTintColor: colors.secondary, 
-        tabBarStyle: { backgroundColor: colors.primary, height: 50 } 
+        tabBarStyle: { backgroundColor: colors.primary, height: 50, display: windowWidth > 800 ? "none" : "flex" } 
         }} 
         sceneContainerStyle={{backgroundColor: colors.backgroundColor}}>
         <Tab.Screen name={"Explore"} component={Home} options={{

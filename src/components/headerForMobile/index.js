@@ -1,11 +1,16 @@
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, Dimensions } from 'react-native';
 import styles from "./styles"
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 
 const HeaderForMobile = () => {
+  const windowWidth = Number(Dimensions.get("window").width);
+
   return(
     <>
-    <View style={styles.header}>
+    <View style={[
+          styles.headerWrap,
+          { display: windowWidth > 800 ? "none" : "flex" },
+        ]}>
     <View style={styles.header_search}>
       <Feather name='search' size={24} color='black' />
       <TextInput placeholder='search in Rent.com' style={styles.header_search_input} multiline={false} />
