@@ -88,9 +88,16 @@ const Listing = () => {
             const imageUrl = component.uri;
             const response = await fetch(imageUrl);
             const blob = await response.blob();
-            const urlParts = imageUrl.split(".");
-            const extension = urlParts[urlParts.length - 1];
-            const key = `${uuidv4()}.${extension}`;
+            if (Platform.OS === "web") {
+                const contentType = blob.type;
+                const extension = contentType.split("/")[1];
+                var key = `${uuidv4()}.${extension}`;
+              } else {
+                const urlParts = imageUrl.split(".");
+                const extension = urlParts[urlParts.length - 1];
+                var key = `${uuidv4()}.${extension}`;
+              }
+      
             imageAllUrl.push({imageUrl:key});
             await Storage.put(key, blob);
             
@@ -113,9 +120,15 @@ const Listing = () => {
                     query: createListing,
                     variables: { input: postData },
                     authMode: "AMAZON_COGNITO_USER_POOLS",
-                });
-                setPostProcessing(false);
-                setPostSuccess("Your adv have successfully published.");
+                  });
+                  if (Platform.OS === "web") {
+                    setPostProcessing(false);
+                    alert("Your adv have successfully published.")
+                    navigation.navigate("Home", { screen: "Explore" });
+                  } else {
+                    setPostProcessing(false);
+                    setPostSuccess("Your adv have successfully published.");
+                  }
             }
         })
     }
@@ -180,13 +193,20 @@ const Listing = () => {
 
                 <View style={styles.inputText}>
                     <MaterialIcons name="title" size={24} color={colors.secondary} />
-                    <TextInput placeholder="Adv Title" style={{ width: "100%"}} onChangeText={(text) => {
+                    <TextInput placeholder="Adv Title" style={{
+                        width: "100%", 
+                        outline: Platform.OS === "web" ? "none": "",
+                    }} onChangeText={(text) => {
                         setTitle(text)
                     }} />
                 </View>
                 <View style={styles.inputText}>
                     <MaterialIcons name="description" size={24} color={colors.secondary} />
-                    <TextInput placeholder="write a description" style={{ marginLeft: 5, width: "100%" }} onChangeText={(text) => {
+                    <TextInput placeholder="write a description" style={{ 
+                        marginLeft: 5, 
+                        width: "100%", 
+                        outline: Platform.OS === "web" ? "none": "",
+                        }} onChangeText={(text) => {
                         setDescription(text)
                     }} multiline={true} numberOfLines={3} />
                 </View>
