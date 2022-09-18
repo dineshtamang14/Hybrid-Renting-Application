@@ -11,6 +11,8 @@ import {
   FontAwesome5,
 } from "@expo/vector-icons";
 import { colors } from "../../modal/color";
+import { Auth } from "aws-amplify";
+
 const MenuDetailsForDesktop = (props) => {
   const navigation = useNavigation();
   const windowWidth = Number(Dimensions.get("window").width);
@@ -69,7 +71,12 @@ const MenuDetailsForDesktop = (props) => {
               justifyContent: "flex-start",
               alignItems: "center",
               marginBottom: 10,
-            }}>
+            }}
+            onPress = {() => {
+              Auth.signOut();
+              navigation.navigate("Home", { screen: "Explore" });
+            }}
+            >
             <AntDesign name="logout" size={24} color={colors.white} />
             <Text style={{ color: colors.white, marginLeft: 10 }}>Logout</Text>
           </Pressable>

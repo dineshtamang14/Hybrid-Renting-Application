@@ -110,7 +110,7 @@ const Listing = () => {
                     images: JSON.stringify(imageAllUrl),
                     locationID: location.locID,
                     locationName: location.locName,
-                    ownerEmail: userEmail,
+                    owner: userEmail,
                     rentValue: rentValue,
                     userID: userID,
                     commonID: "1"
@@ -150,7 +150,7 @@ const Listing = () => {
                             if (Platform.OS === "web") {
                                 pickImage();
                             } else {
-                                navigation.navigate("SelectPhoto");
+                                navigation.navigate("SelectPhotos");
                             }
                     }}>
                         <AntDesign name="pluscircle" size={24} color="black" />

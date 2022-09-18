@@ -8,7 +8,7 @@ type Listing
   @auth(
     rules: [
       { allow: owner }
-      { allow: public, operations: [read], provider: iam }
+      { allow: public, provider: iam, operations: [read] }
       { allow: private, provider: userPools }
     ]
   )
@@ -21,7 +21,7 @@ type Listing
   images: String
   locationID: String
   locationName: String
-  ownerEmail: String
+  owner: String
   rentValue: String
   userID: ID
   commonID: String
@@ -30,7 +30,6 @@ type Listing
 
 type RentOrder
   @model
-  # for fetching data from data base
   @key(
     name: "OrderByBorrowerID"
     fields: ["borrowerUserId", "createdAt"]
@@ -40,6 +39,13 @@ type RentOrder
     name: "OrderByLenderID"
     fields: ["lenderUserID", "createdAt"]
     queryField: "geteOrderByLenderID"
+  )
+  @auth(
+    rules: [
+      { allow: owner }
+      { allow: public, provider: iam, operations: [read] }
+      { allow: private, provider: userPools }
+    ]
   ) {
   id: ID!
   advId: ID!
@@ -48,7 +54,6 @@ type RentOrder
   rentValue: String
   borrowerEmailID: String
   lenderEmailID: String
-  # for connecting to Listing table
   listing: Listing @connection(fields: ["advId"])
   commonID: String
   createdAt: AWSDateTime

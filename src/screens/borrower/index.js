@@ -8,7 +8,6 @@ const BorrowerScreen = () => {
   const [userID, setUserID] = useState("");
   Auth.currentAuthenticatedUser()
     .then((user) => {
-      //   console.log("user id is: ", user.attributes.sub);
       setUserID(user.attributes.sub);
     })
     .catch((err) => {
@@ -27,7 +26,6 @@ const BorrowerScreen = () => {
       });
 
       setNewItems(orderList.data.listRentOrders.items);
-      //   consolea.log("Order data is: ", orderList.data.listRentOrders.items);
     } catch (err) {
       console.log(err);
     }

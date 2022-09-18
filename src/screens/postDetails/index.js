@@ -6,7 +6,8 @@ import {
   ScrollView,
   Dimensions,
   Pressable,
-  Alert
+  Platform,
+  Alert,
 } from "react-native";
 import { colors } from "../../modal/color";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -15,46 +16,43 @@ import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
 import { API, Auth } from "aws-amplify";
 import { createRentOrder } from "../../graphql/mutations";
 
+
 const PostDetails = () => {
   const windowWidth = Number(Dimensions.get("window").width);
   const route = useRoute();
   const navigation = useNavigation();
-
-  const [images, setImages] = useState(
+  // console.log("Postdetails title is: ", route.params.postInfo.title);
+  const [images, setimages] = useState(
     JSON.parse(route.params.postInfo.images)
   );
-
+  const [lenderUserEmail, setLenderUserEmail] = useState(
+    route.params.postInfo.owner
+  );
+  const [userEmail, setUserEmail] = useState("");
+  const substrEmail = lenderUserEmail.substr(0, lenderUserEmail.indexOf("@"));
   const [menuToggle, setMenuToggle] = useState(false);
   const [userID, setUserID] = useState("");
-  const [userEmail, setUserEmail] = useState("");
-  const [lenderUserEmail, setLenderUserEmail] = useState(
-    route.params.postInfo.ownerEmail
-  );
-  const substrEmail = lenderUserEmail.substr(0, lenderUserEmail.indexOf("@"));
 
   Auth.currentAuthenticatedUser()
-  .then((user) => {
-    // console.log("user id is: ", user.attributes.sub);
-    setUserID(user.attributes.sub);
-    setUserEmail(user.attributes.email);
-  })
-  .catch((err) => {
-    console.log(err);
-    throw err;
-  });
-
-const [postSuccess, setPostSuccess] = useState("");
+    .then((user) => {
+      setUserID(user.attributes.sub);
+      setUserEmail(user.attributes.email);
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
+  const [postSuccess, setPostSuccess] = useState("");
   useEffect(() => {
     if (postSuccess !== "") {
       Alert.alert("Success", postSuccess, [
-      {
-        text: "Ok",
-        onPress: () => navigation.navigate("Home", { screen: "Explore" }),
-      },
+        {
+          text: "Ok",
+          onPress: () => navigation.navigate("Home", { screen: "Explore" }),
+        },
       ]);
     }
   }, [postSuccess]);
-
   const orderToDB = async () => {
     const postData = {
       advId: route.params.postInfo.id,
@@ -64,20 +62,24 @@ const [postSuccess, setPostSuccess] = useState("");
       borrowerEmailID: userEmail,
       lenderEmailID: lenderUserEmail,
       commonID: "1",
-    };
+    }
     await API.graphql({
       query: createRentOrder,
       variables: { input: postData },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-    setPostSuccess("Your order have successfully placed.");
-    navigation.navigate("Home", { screen: "Journal" });
+    if (Platform.OS === "web") {
+      alert("Your order have successfully placed.")
+      navigation.navigate("Home", { screen: "Journal" });
+    } else {
+      setPostSuccess("Your order have successfully placed.");
+      navigation.navigate("Home", { screen: "Journal" });
+    }
   };
-
   return (
     <View style={{ flex: 1, position: "relative" }}>
-    <HeaderForDesktop setMenuToggle={setMenuToggle} menuToggle={menuToggle} />
-    <View style={{ alignItems: "center" }}>
+      <HeaderForDesktop setMenuToggle={setMenuToggle} menuToggle={menuToggle} />
+      <View style={{ alignItems: "center" }}>
         <View
           style={{
             width: windowWidth > 800 ? "80%" : "100%",
@@ -90,7 +92,7 @@ const [postSuccess, setPostSuccess] = useState("");
                 <Image
                   source={{
                     uri:
-                      "https://d3qz0eunla69v9.cloudfront.net/fit-in/400x400/public/" +
+                      "https://d3qz0eunla69v9.cloudfront.net/fit-in/500x500/public/" +
                       images[index].imageUrl,
                   }}
                   style={{
@@ -167,7 +169,7 @@ const [postSuccess, setPostSuccess] = useState("");
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                ₹ {route.params.postInfo.rentValue}
+                $ {route.params.postInfo.rentValue}
               </Text>
               <Text style={{ color: colors.grey }}>A day</Text>
             </View>
@@ -178,7 +180,7 @@ const [postSuccess, setPostSuccess] = useState("");
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                ₹ {route.params.postInfo.rentValue * 7}
+                $ {route.params.postInfo.rentValue * 7}
               </Text>
               <Text style={{ color: colors.grey }}>A week</Text>
             </View>
@@ -189,7 +191,7 @@ const [postSuccess, setPostSuccess] = useState("");
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                ₹ {route.params.postInfo.rentValue * 30}
+                $ {route.params.postInfo.rentValue * 30}
               </Text>
               <Text style={{ color: colors.grey }}>A month</Text>
             </View>
