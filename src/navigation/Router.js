@@ -26,7 +26,7 @@ const Route = () => {
               },
             },
             SelectLocation: "/SelectLocation",
-            PostDetails: "/PostDetails",
+            PostDetails: "/PostDetails/:id",
           },
         },
       }}>

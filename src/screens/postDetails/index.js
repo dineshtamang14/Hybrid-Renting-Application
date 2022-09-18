@@ -10,6 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { colors } from "../../modal/color";
+import { getListing } from "../../graphql/queries";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import HeaderForDesktop from "../../components/headerForDesktop";
 import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
@@ -21,13 +22,29 @@ const PostDetails = () => {
   const windowWidth = Number(Dimensions.get("window").width);
   const route = useRoute();
   const navigation = useNavigation();
-  // console.log("Postdetails title is: ", route.params.postInfo.title);
-  const [images, setimages] = useState(
-    JSON.parse(route.params.postInfo.images)
-  );
-  const [lenderUserEmail, setLenderUserEmail] = useState(
-    route.params.postInfo.owner
-  );
+  const [images, setimages] = useState("");
+  const [lenderUserEmail, setLenderUserEmail] = useState("");
+  const [postDetailsData, setPostDetailsData] = useState({});
+
+  const fetchAll = async () => {
+    try {
+      const postDetailsItem = await API.graphql({
+        query: getListing,
+        variables: {id: route.params.id},
+        authMode: "AWS_IAM"
+      });
+      setLenderUserEmail(postDetailsItem.data.getListing.owner);
+      setimages(JSON.parse(postDetailsItem.data.getListing.images));
+      setPostDetailsData(postDetailsItem.data.getListing);
+    } catch(err){
+      console.log(err);
+      alert(err);
+    }
+  };
+  useEffect(() => {
+    fetchAll();
+  })
+  // console.log("Postdetails title is: ", postDetailsData.title);
   const [userEmail, setUserEmail] = useState("");
   const substrEmail = lenderUserEmail.substr(0, lenderUserEmail.indexOf("@"));
   const [menuToggle, setMenuToggle] = useState(false);
@@ -55,10 +72,10 @@ const PostDetails = () => {
   }, [postSuccess]);
   const orderToDB = async () => {
     const postData = {
-      advId: route.params.postInfo.id,
+      advId: postDetailsData.id,
       borrowerUserId: userID,
-      lenderUserID: route.params.postInfo.userID,
-      rentValue: route.params.postInfo.rentValue,
+      lenderUserID: postDetailsData.userID,
+      rentValue: postDetailsData.rentValue,
       borrowerEmailID: userEmail,
       lenderEmailID: lenderUserEmail,
       commonID: "1",
@@ -113,7 +130,7 @@ const PostDetails = () => {
               marginTop: 30,
               color: colors.secondary,
             }}>
-            {route.params.postInfo.title}
+            {postDetailsData.title}
           </Text>
           <View
             style={{
@@ -169,7 +186,7 @@ const PostDetails = () => {
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                $ {route.params.postInfo.rentValue}
+                $ {postDetailsData.rentValue}
               </Text>
               <Text style={{ color: colors.grey }}>A day</Text>
             </View>
@@ -180,7 +197,7 @@ const PostDetails = () => {
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                $ {route.params.postInfo.rentValue * 7}
+                $ {postDetailsData.rentValue * 7}
               </Text>
               <Text style={{ color: colors.grey }}>A week</Text>
             </View>
@@ -191,7 +208,7 @@ const PostDetails = () => {
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                $ {route.params.postInfo.rentValue * 30}
+                $ {postDetailsData.rentValue * 30}
               </Text>
               <Text style={{ color: colors.grey }}>A month</Text>
             </View>
@@ -201,7 +218,7 @@ const PostDetails = () => {
               Preferred Meetup Location
             </Text>
             <Text style={{ color: colors.secondary }}>
-              {route.params.postInfo.locationName}
+              {postDetailsData.locationName}
             </Text>
           </View>
           <View style={{ margin: 10 }}>
@@ -209,7 +226,7 @@ const PostDetails = () => {
               Description
             </Text>
             <Text style={{ color: colors.secondary }}>
-              {route.params.postInfo.description}
+              {postDetailsData.description}
             </Text>
           </View>
         </View>
