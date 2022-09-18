@@ -74,6 +74,7 @@ const MenuDetailsForDesktop = (props) => {
             }}
             onPress = {() => {
               Auth.signOut();
+              alert("Your Signed Out...");
               navigation.navigate("Home", { screen: "Explore" });
             }}
             >

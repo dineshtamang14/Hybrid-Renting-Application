@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Text,
   ScrollView,
   Pressable,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { Entypo, Ionicons, MaterialIcons, AntDesign } from "@expo/vector-icons";
 import styles from "./styles";
 import { colors } from "../../modal/color";
 const CategoryForDesktop = (props) => {
+  const navigation = useNavigation();
 
   const [catState, setCatState] = useState({
     names: [

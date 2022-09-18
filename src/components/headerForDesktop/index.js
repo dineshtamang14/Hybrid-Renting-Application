@@ -19,32 +19,46 @@ const HeaderForDesktop = (props) => {
   function onSearchText() {
     props.setSearchText(inputSearchText);
   }
-
   return (
     <>
       <View
-        style={{
-        display: windowWidth > 800 ? "flex" : "none",
-        height: 80,
-        backgroundColor: colors.primary,
-        width: "100%",
-        justifyContent: "center",
-        alignItems: "center",
-        shadowColor: colors.black,
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.9,
-        shadowRadius: 5,
-        elevation: 5,
-    }}>
+        style={[
+          {
+            display: windowWidth > 800 ? "flex" : "none",
+            height: 80,
+            backgroundColor: colors.primary,
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
+            shadowColor: colors.black,
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.9,
+            shadowRadius: 5,
+            elevation: 5,
+          },
+        ]}>
         <View
-          style={styles.sub_header}>
+          style={{
+            width: "80%",
+            flexDirection: "row",
+            justifyContent: "space-between",
+          }}>
           <View
-            style={styles.sub_header_text}>
+            style={{
+              flexDirection: "row",
+              justifyContent: "flex-start",
+              alignItems: "center",
+            }}>
             <Pressable
               onPress={() => {
                 navigation.navigate("Home", { screen: "Explore" });
               }}
-              style={styles.sub_header_button}>
+              style={{
+                height: 60,
+                width: 200,
+                justifyContent: "center",
+                alignItems: "flex-start",
+              }}>
               <Image
                 resizeMode="contain"
                 source={require("../../../assets/logo.png")}
@@ -52,19 +66,44 @@ const HeaderForDesktop = (props) => {
               />
             </Pressable>
             <View
-              style={styles.sub_header_text1}>
+              style={{
+                marginLeft: 15,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}>
               <TextInput
                 multiline={false}
                 placeholder="Search Rent"
                 onChangeText={(text) => setInputSearchText(text)}
-                style={styles.sub_header_input}
+                style={{
+                  backgroundColor: colors.white,
+                  height: 40,
+                  width: 250,
+                  padding: 5,
+                  borderBottomLeftRadius: 5,
+                  borderTopLeftRadius: 5,
+                  borderWidth: 2,
+                  borderColor: colors.secondary,
+                }}
               />
               <Pressable
                 onPress={() => {
                   onSearchText();
                 }}>
                 <Text
-                  style={styles.sub_header_search}>
+                  style={{
+                    backgroundColor: colors.primary,
+                    height: 40,
+                    padding: 8.5,
+                    borderBottomRightRadius: 5,
+                    borderTopRightRadius: 5,
+                    borderWidth: 2,
+                    borderColor: colors.secondary,
+                    marginLeft: -1.8,
+                    fontWeight: "bold",
+                    color: colors.secondary,
+                  }}>
                   Search
                 </Text>
               </Pressable>
@@ -77,6 +116,8 @@ const HeaderForDesktop = (props) => {
                 flexDirection: "row",
                 paddingVertical: 15,
                 paddingHorizontal: 10,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
               <MaterialIcons
                 name="location-on"
@@ -86,7 +127,9 @@ const HeaderForDesktop = (props) => {
               <Text style={{ color: colors.secondary }}>
                 Location{" "}
                 <Text style={{ fontWeight: "bold", color: colors.secondary }}>
-                    Mumbai
+                  {props.searchByLocation
+                    ? props.searchByLocation.locationName
+                    : "New York"}
                 </Text>
               </Text>
             </Pressable>

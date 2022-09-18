@@ -267,8 +267,10 @@ const Home = () => {
         searchByLocation={searchByLocation}
       />
       <HeaderForDesktop 
-         setMenuToggle={setMenuToggle}
-         menuToggle={menuToggle}
+        setMenuToggle={setMenuToggle}
+        menuToggle={menuToggle}
+        setSearchText={setSearchText}
+        searchByLocation={searchByLocation}
       />
       <View style={{ flex: 1, alignItems: "center", position: "relative" }}>
         <View style={{
@@ -278,7 +280,7 @@ const Home = () => {
             justifyContent: "center",
         }}>
           <View style={{display: windowWidth > 800 ? "flex" : "none", flexBasis: "20%"}}>
-            <CategoryForDesktop />
+          <CategoryForDesktop setSearchByCategory={setSearchByCategory} />
           </View>
           <FlatList
             style={{ flexBasis: "80%", marginTop: 10 }}
