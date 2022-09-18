@@ -5,11 +5,15 @@ import {
   Image,
   ScrollView,
   Dimensions,
+  Pressable,
+  Alert
 } from "react-native";
 import { colors } from "../../modal/color";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import HeaderForDesktop from "../../components/headerForDesktop";
 import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
+import { API, Auth } from "aws-amplify";
+import { createRentOrder } from "../../graphql/mutations";
 
 const PostDetails = () => {
   const windowWidth = Number(Dimensions.get("window").width);
@@ -21,10 +25,54 @@ const PostDetails = () => {
   );
 
   const [menuToggle, setMenuToggle] = useState(false);
+  const [userID, setUserID] = useState("");
+  const [userEmail, setUserEmail] = useState("");
   const [lenderUserEmail, setLenderUserEmail] = useState(
     route.params.postInfo.ownerEmail
   );
   const substrEmail = lenderUserEmail.substr(0, lenderUserEmail.indexOf("@"));
+
+  Auth.currentAuthenticatedUser()
+  .then((user) => {
+    // console.log("user id is: ", user.attributes.sub);
+    setUserID(user.attributes.sub);
+    setUserEmail(user.attributes.email);
+  })
+  .catch((err) => {
+    console.log(err);
+    throw err;
+  });
+
+const [postSuccess, setPostSuccess] = useState("");
+  useEffect(() => {
+    if (postSuccess !== "") {
+      Alert.alert("Success", postSuccess, [
+      {
+        text: "Ok",
+        onPress: () => navigation.navigate("Home", { screen: "Explore" }),
+      },
+      ]);
+    }
+  }, [postSuccess]);
+
+  const orderToDB = async () => {
+    const postData = {
+      advId: route.params.postInfo.id,
+      borrowerUserId: userID,
+      lenderUserID: route.params.postInfo.userID,
+      rentValue: route.params.postInfo.rentValue,
+      borrowerEmailID: userEmail,
+      lenderEmailID: lenderUserEmail,
+      commonID: "1",
+    };
+    await API.graphql({
+      query: createRentOrder,
+      variables: { input: postData },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    setPostSuccess("Your order have successfully placed.");
+    navigation.navigate("Home", { screen: "Journal" });
+  };
 
   return (
     <View style={{ flex: 1, position: "relative" }}>
@@ -164,6 +212,25 @@ const PostDetails = () => {
           </View>
         </View>
       </View>
+      <Pressable
+        onPress={orderToDB}
+        style={{
+          position: "absolute",
+          bottom: 10,
+          right: windowWidth > 800 ? "15%" : "40%",
+        }}>
+        <Text
+          style={{
+            backgroundColor: colors.secondary,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            borderRadius: 50,
+            color: colors.white,
+            elevation: 5,
+          }}>
+          ORDER
+        </Text>
+      </Pressable>
       <MenuDetailsForDesktop menuToggle={menuToggle} top={59} right={"7.8%"} />
     </View>
   );

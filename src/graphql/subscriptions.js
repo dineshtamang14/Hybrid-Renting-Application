@@ -1,6 +1,105 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateRentOrder = /* GraphQL */ `
+  subscription OnCreateRentOrder {
+    onCreateRentOrder {
+      id
+      advId
+      borrowerUserId
+      lenderUserID
+      rentValue
+      borrowerEmailID
+      lenderEmailID
+      commonID
+      createdAt
+      updatedAt
+      listing {
+        id
+        title
+        categoryName
+        categoryID
+        description
+        images
+        locationID
+        locationName
+        ownerEmail
+        rentValue
+        userID
+        commonID
+        createdAt
+        updatedAt
+        owner
+      }
+    }
+  }
+`;
+export const onUpdateRentOrder = /* GraphQL */ `
+  subscription OnUpdateRentOrder {
+    onUpdateRentOrder {
+      id
+      advId
+      borrowerUserId
+      lenderUserID
+      rentValue
+      borrowerEmailID
+      lenderEmailID
+      commonID
+      createdAt
+      updatedAt
+      listing {
+        id
+        title
+        categoryName
+        categoryID
+        description
+        images
+        locationID
+        locationName
+        ownerEmail
+        rentValue
+        userID
+        commonID
+        createdAt
+        updatedAt
+        owner
+      }
+    }
+  }
+`;
+export const onDeleteRentOrder = /* GraphQL */ `
+  subscription OnDeleteRentOrder {
+    onDeleteRentOrder {
+      id
+      advId
+      borrowerUserId
+      lenderUserID
+      rentValue
+      borrowerEmailID
+      lenderEmailID
+      commonID
+      createdAt
+      updatedAt
+      listing {
+        id
+        title
+        categoryName
+        categoryID
+        description
+        images
+        locationID
+        locationName
+        ownerEmail
+        rentValue
+        userID
+        commonID
+        createdAt
+        updatedAt
+        owner
+      }
+    }
+  }
+`;
 export const onCreateListing = /* GraphQL */ `
   subscription OnCreateListing {
     onCreateListing {
@@ -18,6 +117,7 @@ export const onCreateListing = /* GraphQL */ `
       commonID
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -38,6 +138,7 @@ export const onUpdateListing = /* GraphQL */ `
       commonID
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -58,6 +159,7 @@ export const onDeleteListing = /* GraphQL */ `
       commonID
       createdAt
       updatedAt
+      owner
     }
   }
 `;

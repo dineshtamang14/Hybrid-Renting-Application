@@ -1,9 +1,10 @@
-import { Entypo, FontAwesome, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Entypo, FontAwesome, MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { colors } from "../modal/color";
 import Home from "../screens/Home";
 import Listing from "../screens/Listing";
 import { Dimensions } from "react-native";
+import LendBorrowerNavScreen from "./LendBorrNav";
 
 const BottomTabNav = () => {
     const windowWidth = Number(Dimensions.get("window").width);
@@ -29,10 +30,11 @@ const BottomTabNav = () => {
             ),
             headerShown: false,
         }} />
-                <Tab.Screen name={"Chat"} component={Home} options={{
+                <Tab.Screen name={"Journal"} component={LendBorrowerNavScreen} options={{
             tabBarIcon: ({color}) => (
-                <Entypo name="chat" size={25} color="black" />
+                <FontAwesome5 name="journal-whills" size={24} color="black" />
             ),
+            headerShown: false,
         }} />
                 <Tab.Screen name={"Profile"} component={Home} options={{
             tabBarIcon: ({color}) => (

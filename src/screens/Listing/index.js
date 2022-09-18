@@ -195,7 +195,7 @@ const Listing = () => {
                     <MaterialIcons name="title" size={24} color={colors.secondary} />
                     <TextInput placeholder="Adv Title" style={{
                         width: "100%", 
-                        outline: Platform.OS === "web" ? "none": "",
+                        outline: Platform.OS === "web" && "none",
                     }} onChangeText={(text) => {
                         setTitle(text)
                     }} />
@@ -205,14 +205,14 @@ const Listing = () => {
                     <TextInput placeholder="write a description" style={{ 
                         marginLeft: 5, 
                         width: "100%", 
-                        outline: Platform.OS === "web" ? "none": "",
+                        outline: Platform.OS === "web" && "none",
                         }} onChangeText={(text) => {
                         setDescription(text)
                     }} multiline={true} numberOfLines={3} />
                 </View>
                 <View style={[styles.inputText, { width: "50%" }]}>
                     <FontAwesome name="rupee" size={24} color={colors.secondary} />
-                    <TextInput placeholder="Add a value" style={{ marginLeft: 5, width: "100%" }} onChangeText={(text) => setRentValue(text)} keyboardType="number-pad" />
+                    <TextInput placeholder="Add a value" style={{ marginLeft: 5, width: "100%", outline: Platform.OS === "web" && "none" }} onChangeText={(text) => setRentValue(text)} keyboardType="number-pad" />
                 </View>
 
                 <Pressable style={styles.post_adv} onPress={() => {

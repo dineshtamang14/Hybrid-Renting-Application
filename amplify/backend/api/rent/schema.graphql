@@ -11,7 +11,8 @@ type Listing
       { allow: public, operations: [read], provider: iam }
       { allow: private, provider: userPools }
     ]
-  ) {
+  )
+  @searchable {
   id: ID!
   title: String!
   categoryName: String
@@ -23,6 +24,32 @@ type Listing
   ownerEmail: String
   rentValue: String
   userID: ID
+  commonID: String
+  createdAt: AWSDateTime
+}
+
+type RentOrder
+  @model
+  # for fetching data from data base
+  @key(
+    name: "OrderByBorrowerID"
+    fields: ["borrowerUserId", "createdAt"]
+    queryField: "geteOrderByBorrowerID"
+  )
+  @key(
+    name: "OrderByLenderID"
+    fields: ["lenderUserID", "createdAt"]
+    queryField: "geteOrderByLenderID"
+  ) {
+  id: ID!
+  advId: ID!
+  borrowerUserId: ID!
+  lenderUserID: ID!
+  rentValue: String
+  borrowerEmailID: String
+  lenderEmailID: String
+  # for connecting to Listing table
+  listing: Listing @connection(fields: ["advId"])
   commonID: String
   createdAt: AWSDateTime
 }
