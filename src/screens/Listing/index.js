@@ -121,6 +121,7 @@ const Listing = () => {
                     variables: { input: postData },
                     authMode: "AMAZON_COGNITO_USER_POOLS",
                   });
+                  setImageData([]);
                   if (Platform.OS === "web") {
                     setPostProcessing(false);
                     alert("Your adv have successfully published.")

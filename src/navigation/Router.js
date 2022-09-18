@@ -1,11 +1,12 @@
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import Home from "../screens/Home"
 import PostDetails from "../screens/postDetails";
 import SelectCategoryScreen from "../screens/selectCategory";
 import SelectLocationScreen from "../screens/selectLocation";
 import SelectPhotosScreen from "../screens/selectPhotos";
 import BottomTabNav from "./BottomTabNavigator";
+import LocationSearch from "../components/locationSearch";
+import CategorySearch from "../components/categorySearch";
 
 const Route = () => {
     const stack = createStackNavigator();
@@ -40,6 +41,8 @@ const Route = () => {
             <stack.Screen name="SelectPhotos" component={SelectPhotosScreen} options={{headerShown: false}} />
             <stack.Screen name="SelectCategory" component={SelectCategoryScreen} options={{headerShown: false}} />
             <stack.Screen name="SelectLocation" component={SelectLocationScreen} options={{headerShown: false}} />
+            <stack.Screen name="LocationSearch" component={LocationSearch} options={{headerShown: false}} />
+            <stack.Screen name="CategorySearch" component={CategorySearch} options={{headerShown: false}} />
         </stack.Navigator>
     </NavigationContainer>
   );
