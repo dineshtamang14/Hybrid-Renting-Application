@@ -89,11 +89,13 @@ const PostDetails = () => {
     <View style={{ flex: 1, position: "relative" }}>
       <HeaderForDesktop setMenuToggle={setMenuToggle} menuToggle={menuToggle} />
       <View style={{ alignItems: "center" }}>
-        <View
+        <ScrollView
+          showsVerticalScrollIndicator={windowWidth > 800 ? false: true}
           style={{
             width: windowWidth > 800 ? "80%" : "100%",
             backgroundColor:
               windowWidth > 800 ? colors.white : colors.backgroundColor,
+              marginTop: windowWidth > 800 ? 10 : 0,
           }}>
           <ScrollView horizontal={true}>
             {images &&
@@ -221,7 +223,7 @@ const PostDetails = () => {
               {route.params.postInfo.description}
             </Text>
           </View>
-        </View>
+        </ScrollView>
       </View>
       <Pressable
         onPress={orderToDB}

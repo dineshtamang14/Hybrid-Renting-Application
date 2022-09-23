@@ -11,6 +11,11 @@ const BorrowerHeadScreen = (props) => {
   const navigation = useNavigation();
   const singlePost = props.BorrowerHead;
   const [images, setimages] = useState(JSON.parse(singlePost.listing.images));
+
+  if(!singlePost){
+    alert("No Borrowers Data found..");
+    navigation.navigate("Home", { screen: "Explore" });
+  }
   return (
     <View
       style={
