@@ -61,7 +61,7 @@ const HeaderForDesktop = (props) => {
               }}>
               <Image
                 resizeMode="contain"
-                source={require("../../../assets/logo.png")}
+                source={require("../../../assets/rent-logo.png")}
                 style={{ width: "100%", height: "100%" }}
               />
             </Pressable>
@@ -129,7 +129,7 @@ const HeaderForDesktop = (props) => {
                 <Text style={{ fontWeight: "bold", color: colors.secondary }}>
                   {props.searchByLocation
                     ? props.searchByLocation.locationName
-                    : "New York"}
+                    : "Mumbai"}
                 </Text>
               </Text>
             </Pressable>

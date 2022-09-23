@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   Text,
   View,
@@ -14,6 +15,20 @@ import { colors } from "../../modal/color";
 import { Auth } from "aws-amplify";
 
 const MenuDetailsForDesktop = (props) => {
+  const [logged, setLogged] = useState(false);
+  Auth.currentAuthenticatedUser()
+  .then((user) => {
+      if(user.attributes.email){
+        setLogged(true);
+      } else {
+        setLogged(false);
+      }
+  })
+  .catch((err) => {
+      console.log(err);
+      throw err;
+  })
+
   const navigation = useNavigation();
   const windowWidth = Number(Dimensions.get("window").width);
   return (
@@ -73,13 +88,18 @@ const MenuDetailsForDesktop = (props) => {
               marginBottom: 10,
             }}
             onPress = {() => {
-              Auth.signOut();
-              alert("Your Signed Out...");
-              navigation.navigate("Home", { screen: "Explore" });
+              if(logged){
+                setLogged(false);
+                Auth.signOut();
+                alert("Your Signed Out...");
+                navigation.navigate("Home", { screen: "Explore" });
+              } else {
+                navigation.navigate("Home", { screen: "Listing" });
+              }
             }}
             >
             <AntDesign name="logout" size={24} color={colors.white} />
-            <Text style={{ color: colors.white, marginLeft: 10 }}>Logout</Text>
+            <Text style={{ color: colors.white, marginLeft: 10 }}>{logged ? "Logout" : "Login"}</Text>
           </Pressable>
         </View>
       </View>

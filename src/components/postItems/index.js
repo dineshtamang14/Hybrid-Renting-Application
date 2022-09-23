@@ -11,8 +11,8 @@ const PostItems = (props) => {
     return (
         <Pressable onPress={() => {
           navigation.navigate('PostDetails', {
-            // postInfo: singlePost,
-            id: singlePost.id
+            postInfo: singlePost,
+            //id: singlePost.id
           });
         }} style={styles.container}>
           <View style={styles.postWrap}>

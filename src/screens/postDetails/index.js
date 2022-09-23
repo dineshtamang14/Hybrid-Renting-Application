@@ -10,7 +10,6 @@ import {
   Alert,
 } from "react-native";
 import { colors } from "../../modal/color";
-import { getListing } from "../../graphql/queries";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import HeaderForDesktop from "../../components/headerForDesktop";
 import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
@@ -22,29 +21,15 @@ const PostDetails = () => {
   const windowWidth = Number(Dimensions.get("window").width);
   const route = useRoute();
   const navigation = useNavigation();
-  const [images, setimages] = useState("");
-  const [lenderUserEmail, setLenderUserEmail] = useState("");
-  const [postDetailsData, setPostDetailsData] = useState({});
 
-  const fetchAll = async () => {
-    try {
-      const postDetailsItem = await API.graphql({
-        query: getListing,
-        variables: {id: route.params.id},
-        authMode: "AWS_IAM"
-      });
-      setLenderUserEmail(postDetailsItem.data.getListing.owner);
-      setimages(JSON.parse(postDetailsItem.data.getListing.images));
-      setPostDetailsData(postDetailsItem.data.getListing);
-    } catch(err){
-      console.log(err);
-      alert(err);
-    }
-  };
-  useEffect(() => {
-    fetchAll();
-  })
-  // console.log("Postdetails title is: ", postDetailsData.title);
+  const [logged, setLogged] = useState(false);
+
+  const [images, setimages] = useState(
+    JSON.parse(route.params.postInfo.images)
+  );
+  const [lenderUserEmail, setLenderUserEmail] = useState(
+    route.params.postInfo.owner
+  );
   const [userEmail, setUserEmail] = useState("");
   const substrEmail = lenderUserEmail.substr(0, lenderUserEmail.indexOf("@"));
   const [menuToggle, setMenuToggle] = useState(false);
@@ -54,6 +39,7 @@ const PostDetails = () => {
     .then((user) => {
       setUserID(user.attributes.sub);
       setUserEmail(user.attributes.email);
+      setLogged(true);
     })
     .catch((err) => {
       console.log(err);
@@ -71,28 +57,34 @@ const PostDetails = () => {
     }
   }, [postSuccess]);
   const orderToDB = async () => {
-    const postData = {
-      advId: postDetailsData.id,
-      borrowerUserId: userID,
-      lenderUserID: postDetailsData.userID,
-      rentValue: postDetailsData.rentValue,
-      borrowerEmailID: userEmail,
-      lenderEmailID: lenderUserEmail,
-      commonID: "1",
+    if(logged){
+      const postData = {
+	      advId: route.params.postInfo.id,
+        borrowerUserId: userID,
+        lenderUserID: route.params.postInfo.userID,
+        rentValue: route.params.postInfo.rentValue,
+        borrowerEmailID: userEmail,
+        lenderEmailID: lenderUserEmail,
+        commonID: "1",
+      }
+      await API.graphql({
+        query: createRentOrder,
+        variables: { input: postData },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+      if (Platform.OS === "web") {
+        alert("Your order have successfully placed.")
+        navigation.navigate("Home", { screen: "Journal" });
+      } else {
+        setPostSuccess("Your order have successfully placed.");
+        navigation.navigate("Home", { screen: "Journal" });
+      }
+      } else {
+        alert("your not logged in... please login");
+        navigation.navigate("Home", { screen: "Listing" });
+      }
     }
-    await API.graphql({
-      query: createRentOrder,
-      variables: { input: postData },
-      authMode: "AMAZON_COGNITO_USER_POOLS",
-    });
-    if (Platform.OS === "web") {
-      alert("Your order have successfully placed.")
-      navigation.navigate("Home", { screen: "Journal" });
-    } else {
-      setPostSuccess("Your order have successfully placed.");
-      navigation.navigate("Home", { screen: "Journal" });
-    }
-  };
+
   return (
     <View style={{ flex: 1, position: "relative" }}>
       <HeaderForDesktop setMenuToggle={setMenuToggle} menuToggle={menuToggle} />
@@ -130,7 +122,7 @@ const PostDetails = () => {
               marginTop: 30,
               color: colors.secondary,
             }}>
-            {postDetailsData.title}
+            {route.params.postInfo.title}
           </Text>
           <View
             style={{
@@ -186,7 +178,7 @@ const PostDetails = () => {
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                $ {postDetailsData.rentValue}
+                ₹ {route.params.postInfo.rentValue}
               </Text>
               <Text style={{ color: colors.grey }}>A day</Text>
             </View>
@@ -197,7 +189,7 @@ const PostDetails = () => {
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                $ {postDetailsData.rentValue * 7}
+                ₹ {route.params.postInfo.rentValue * 7}
               </Text>
               <Text style={{ color: colors.grey }}>A week</Text>
             </View>
@@ -208,7 +200,7 @@ const PostDetails = () => {
                   fontWeight: "bold",
                   color: colors.secondary,
                 }}>
-                $ {postDetailsData.rentValue * 30}
+                ₹ {route.params.postInfo.rentValue * 30}
               </Text>
               <Text style={{ color: colors.grey }}>A month</Text>
             </View>
@@ -218,7 +210,7 @@ const PostDetails = () => {
               Preferred Meetup Location
             </Text>
             <Text style={{ color: colors.secondary }}>
-              {postDetailsData.locationName}
+              {route.params.postInfo.locationName}
             </Text>
           </View>
           <View style={{ margin: 10 }}>
@@ -226,7 +218,7 @@ const PostDetails = () => {
               Description
             </Text>
             <Text style={{ color: colors.secondary }}>
-              {postDetailsData.description}
+              {route.params.postInfo.description}
             </Text>
           </View>
         </View>

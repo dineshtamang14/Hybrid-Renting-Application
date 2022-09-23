@@ -125,10 +125,11 @@ const Listing = () => {
                   if (Platform.OS === "web") {
                     setPostProcessing(false);
                     alert("Your adv have successfully published.")
-                    navigation.navigate("Home", { screen: "Explore" });
+                    navigation.navigate("Home", { screen: "Explore", refresh: true });
                   } else {
                     setPostProcessing(false);
                     setPostSuccess("Your adv have successfully published.");
+                    navigation.navigate("Home", { screen: "Explore", refresh: true });
                   }
             }
         })

@@ -13,7 +13,7 @@ const Home = () => {
   const route = useRoute();
   const [searchText, setSearchText] = useState("");
   const [searchByLocation, setSearchByLocation] = useState({
-    locationName: "Mumbai",
+    locationName: "All",
     locationId: "",
   });
   const [searchByCategory, setSearchByCategory] = useState({
