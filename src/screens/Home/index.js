@@ -3,7 +3,7 @@ import HeaderForMobile from '../../components/headerForMobile';
 import PostItems from "../../components/postItems";
 import { API } from "aws-amplify";
 import { getListingByCreatedAt, searchListings } from "../../graphql/queries";
-import { FlatList, Dimensions, View } from "react-native";
+import { FlatList, Dimensions, View, ScrollView, RefreshControl } from "react-native";
 import HeaderForDesktop from "../../components/headerForDesktop";
 import CategoryForDesktop from "../../components/categoryForDesktop";
 import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
@@ -12,6 +12,7 @@ import { useRoute } from "@react-navigation/native";
 const Home = () => {
   const route = useRoute();
   const [searchText, setSearchText] = useState("");
+  const [refresh, setRefresh] = useState(false);
   const [searchByLocation, setSearchByLocation] = useState({
     locationName: "All",
     locationId: "",
@@ -41,7 +42,7 @@ const Home = () => {
   const [newItems, setNewItems] = useState([]);
 
   var searChWithLocation = async (searchString) => {
-    console.log("cat name", searchByCategory.catId);
+    // console.log("cat name", searchByCategory.catId);
     try {
       const newSearchItems = await API.graphql({
         query: searchListings,
@@ -72,7 +73,7 @@ const Home = () => {
         },
       });
       setNewItems(newSearchItems.data.searchListings.items);
-      console.log("Search by text result", newItems);
+      // console.log("Search by text result", newItems);
     } catch (e) {
       console.log(e);
     }
@@ -204,7 +205,7 @@ const Home = () => {
   useEffect(() => {
     if (searchText !== "") {
       if (searchByCategory.catId == "") {
-        console.log("searchText id change", searchText);
+        // console.log("searchText id change", searchText);
         if (searchByLocation.locationId !== "") {
           searChWithLocationAndText(searchText);
         } else {
@@ -225,7 +226,7 @@ const Home = () => {
   useEffect(() => {
     // alert(searchByCategory.catId);
     if (searchByCategory.catId !== "") {
-      console.log("searchText id change", searchText);
+      // console.log("searchText id change", searchText);
       if (searchByLocation.locationId !== "") {
         // alert(searchByCategory.catId);
         searChWithLocationAndTextAndCategory(searchText, searchByCategory);
@@ -248,7 +249,7 @@ const Home = () => {
       });
 
       setNewItems(itemListByCommonID.data.getListingByCreatedAt.items);
-      console.log(newItems)
+      // console.log(newItems)
     } catch (err) {
       console.log(err);
     }
@@ -256,6 +257,16 @@ const Home = () => {
   useEffect(() => {
     fetchAll();
   }, []);
+
+  const pulldata = async () => {
+    await fetchAll();
+    setRefresh(false);
+  }
+
+  const pull = () => {
+    setRefresh(true);
+    pulldata();
+  }
 
   const [menuToggle, setMenuToggle] = useState(false);
 
@@ -283,7 +294,11 @@ const Home = () => {
           <CategoryForDesktop setSearchByCategory={setSearchByCategory} />
           </View>
           <FlatList
-            style={{ flexBasis: "80%", marginTop: 10 }}
+            refreshControl={<RefreshControl 
+            refreshing={refresh}
+            onRefresh={pull}
+            />}
+            style={{ flexBasis: "80%", marginTop: windowWidth > 800 ? 10 : 1 }}
             data = {newItems}
             renderItem = {({item}) => <PostItems posts={item} /> }
         />
