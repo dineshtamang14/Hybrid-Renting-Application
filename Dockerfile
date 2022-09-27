@@ -13,20 +13,24 @@ EXPOSE $PORT 19001 19002
 # install global packages
 ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
 ENV PATH /home/node/.npm-global/bin:$PATH
-RUN npm i --unsafe-perm --allow-root -g npm@latest expo-cli@latest
+RUN npm install -g yarn
+RUN yarn global add expo-cli
+# RUN npm i --unsafe-perm -g npm@latest expo-cli@latest
 
 # install dependencies first, in a different location for easier app bind mounting for local development
 # due to default /opt permissions we have to create the dir with root and change perms
-RUN mkdir /opt/react_native_app
+# RUN mkdir /opt/react_native_app && chown node:node /opt/react_native_app
 WORKDIR /opt/react_native_app
 ENV PATH /opt/react_native_app/.bin:$PATH
-COPY ./react_native_app/package.json ./react_native_app/package-lock.json ./
-RUN npm install
+USER node
+COPY package.json yarn.lock ./
+RUN yarn install
 
 # copy in our source code last, as it changes the most
-WORKDIR /opt/react_native_app/app
+# WORKDIR /opt/react_native_app/app
+COPY . .
 # for development, we bind mount volumes; comment out for production
-COPY ./rent .
+# COPY ./react_native_app .
 
-ENTRYPOINT ["npm", "run"]
+ENTRYPOINT ["yarn", "run"]
 CMD ["web"]
