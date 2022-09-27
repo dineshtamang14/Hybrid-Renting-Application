@@ -298,7 +298,7 @@ const Home = () => {
             refreshing={refresh}
             onRefresh={pull}
             />}
-            style={{ flexBasis: "80%", marginTop: windowWidth > 800 ? 6 : 1 }}
+            style={{ flexBasis: "80%", marginTop: windowWidth > 800 ? 6 : 1,         borderWidth: 0.5, borderColor: 'grey'}}
             data = {newItems}
             renderItem = {({item}) => <PostItems posts={item} /> }
         />

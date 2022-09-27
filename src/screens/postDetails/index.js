@@ -97,7 +97,7 @@ const PostDetails = () => {
               windowWidth > 800 ? colors.white : colors.backgroundColor,
               marginTop: windowWidth > 800 ? 10 : 0,
           }}>
-          <ScrollView horizontal={true}>
+          <ScrollView horizontal={true} style={{borderWidth: 0.5, borderColor: 'grey'}}>
             {images &&
               images.map((data, index) => (
                 <Image
