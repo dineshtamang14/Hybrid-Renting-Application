@@ -1,0 +1,9 @@
+version: '3'
+services:
+  rent-website:
+    build: 
+      dockerfile: Dockerfile 
+      context: .
+    container_name: rent-website
+    ports: 
+      - "19006:19006"
