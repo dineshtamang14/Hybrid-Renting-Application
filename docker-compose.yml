@@ -1,9 +1,10 @@
 version: '3'
 services:
   rent-website:
+    restart: always
     build: 
       dockerfile: Dockerfile 
       context: .
     container_name: rent-website
     ports: 
-      - "80:19006"
+      - "19006:19006"
