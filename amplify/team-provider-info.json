@@ -17,5 +17,23 @@
         "true": {}
       }
     }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-rent-prod-163938-authRole",
+      "UnauthRoleArn": "arn:aws:iam::120211568300:role/amplify-rent-prod-163938-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::120211568300:role/amplify-rent-prod-163938-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-rent-prod-163938-deployment",
+      "UnauthRoleName": "amplify-rent-prod-163938-unauthRole",
+      "StackName": "amplify-rent-prod-163938",
+      "StackId": "arn:aws:cloudformation:us-east-1:120211568300:stack/amplify-rent-prod-163938/8b54fa10-4630-11ed-a07f-129b64a97aa5",
+      "AmplifyAppId": "d362ghfuv7hcjh"
+    },
+    "categories": {
+      "auth": {
+        "rent7d7b9cd4": {}
+      }
+    }
   }
 }
