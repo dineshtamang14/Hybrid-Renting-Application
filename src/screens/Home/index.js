@@ -243,7 +243,8 @@ const Home = () => {
 
   const deleteData = async () => {
     try {
-      await AsyncStorage.removeItem("rent-data");
+      // await AsyncStorage.removeItem("rent-data");
+      await AsyncStorage.clear();
     } catch (err) {
       console.error(err);
       throw err;
