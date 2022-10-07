@@ -241,15 +241,13 @@ const Home = () => {
     }
   }, [searchByCategory]);
 
-  const setData = async () => {
-    if(!Platform.OS === "web"){
-      setNewItems(JSON.parse(await AsyncStorage.getItem("rent-data")));
+  const deleteData = async () => {
+    try {
+      await AsyncStorage.removeItem("rent-data");
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
-  }
-
-  const getData = async () => {
-    const value = JSON.parse(await AsyncStorage.getItem("rent-data"));
-    return value;
   }
 
   const fetchAll = async () => {
@@ -261,26 +259,40 @@ const Home = () => {
       });
 
       setNewItems(itemListByCommonID.data.getListingByCreatedAt.items);
-      if(!Platform.OS === "web"){
-        await AsyncStorage.setItem("rent-data", JSON.stringify(newItems));
+      try {
+        if(Platform.OS !== "web"){
+          await AsyncStorage.setItem("rent-data", JSON.stringify(newItems));
+        }
+      } catch (err) {
+        console.error(err);
+        throw err;
       }
       // console.log(newItems)
     } catch (err) {
       console.log(err);
     }
   };
+
   useEffect(() => {
     if(Platform.OS === "web"){
       fetchAll();
     }
-    if(!getData()){
-      fetchAll();
-    } else {
-      setData();
+    try {
+      AsyncStorage.getItem("rent-data").then(value => {
+        if(value === null){
+          fetchAll();
+        } else {
+          setNewItems(JSON.parse(value));
+        }
+      })
+    } catch (err) {
+      console.error(err);
+      throw err;
     }
   }, []);
 
   const pulldata = async () => {
+    await deleteData();
     await fetchAll();
     setRefresh(false);
   }
