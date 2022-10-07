@@ -7,15 +7,12 @@ import {
 } from "react-native";
 import styles from "./styles";
 import { useNavigation } from "@react-navigation/native";
+
 const LenderHeadScreen = (props) => {
-  const navigation = useNavigation();
   const singlePost = props.BorrowerHead;
+  const navigation = useNavigation();
   const [images, setimages] = useState(JSON.parse(singlePost.listing.images));
-  if(!singlePost){
-    alert("No Lenders Data found..");
-    navigation.navigate("Home", { screen: "Explore" });
-  }
-  //   console.log("single post is: ", singlePost);
+
   return (
     <View
       style={
@@ -26,11 +23,11 @@ const LenderHeadScreen = (props) => {
         }
       }>
       <Pressable
-        //   onPress={() => {
-        //     navigation.navigate("PostDetails", {
-        //       postInfo: singlePost,
-        //     });
-        //   }}
+          onPress={() => {
+            navigation.navigate("PostDetails", {
+              postInfo: singlePost.listing,
+            });
+          }}
 
         style={[
           styles.container,

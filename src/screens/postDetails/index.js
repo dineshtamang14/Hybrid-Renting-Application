@@ -23,6 +23,7 @@ const PostDetails = () => {
   const navigation = useNavigation();
 
   const [logged, setLogged] = useState(false);
+  const [showOrder, setShowOrder] = useState(true);
 
   const [images, setimages] = useState(
     JSON.parse(route.params.postInfo.images)
@@ -36,16 +37,24 @@ const PostDetails = () => {
   const [userID, setUserID] = useState("");
 
   Auth.currentAuthenticatedUser()
-    .then((user) => {
-      setUserID(user.attributes.sub);
-      setUserEmail(user.attributes.email);
-      setLogged(true);
-    })
-    .catch((err) => {
-      console.log(err);
-      throw err;
-    });
+  .then((user) => {
+    setUserID(user.attributes.sub);
+    setUserEmail(user.attributes.email);
+    setLogged(true);
+  })
+  .catch((err) => {
+    console.log(err);
+    throw err;
+  });
+
+    useEffect(()=> {
+      if(route.params.postInfo.owner === userEmail){
+        setShowOrder(false);
+      }
+    },)
+
   const [postSuccess, setPostSuccess] = useState("");
+
   useEffect(() => {
     if (postSuccess !== "") {
       Alert.alert("Success", postSuccess, [
@@ -56,6 +65,7 @@ const PostDetails = () => {
       ]);
     }
   }, [postSuccess]);
+
   const orderToDB = async () => {
     if(logged){
       const postData = {
@@ -225,7 +235,8 @@ const PostDetails = () => {
           </View>
         </ScrollView>
       </View>
-      <Pressable
+      {showOrder && 
+        <Pressable
         onPress={orderToDB}
         style={{
           position: "absolute",
@@ -244,6 +255,7 @@ const PostDetails = () => {
           ORDER
         </Text>
       </Pressable>
+      }
       <MenuDetailsForDesktop menuToggle={menuToggle} top={59} right={"7.8%"} />
     </View>
   );

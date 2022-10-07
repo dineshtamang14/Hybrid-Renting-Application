@@ -12,10 +12,6 @@ const BorrowerHeadScreen = (props) => {
   const singlePost = props.BorrowerHead;
   const [images, setimages] = useState(JSON.parse(singlePost.listing.images));
 
-  if(!singlePost){
-    alert("No Borrowers Data found..");
-    navigation.navigate("Home", { screen: "Explore" });
-  }
   return (
     <View
       style={
@@ -26,11 +22,11 @@ const BorrowerHeadScreen = (props) => {
         }
       }>
       <Pressable
-          // onPress={() => {
-          //   navigation.navigate("PostDetails", {
-          //     postInfo: singlePost,
-          //   });
-          // }}
+          onPress={() => {
+            navigation.navigate("PostDetails", {
+              postInfo: singlePost.listing,
+            });
+          }}
 
         style={[
           styles.container,
