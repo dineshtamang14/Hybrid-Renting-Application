@@ -14,24 +14,68 @@ const SelectLocationScreen = () => {
     names: [
       {
         id: 0,
-        name: "Mumbai",
+        name: "All"
       },
       {
         id: 1,
-        name: "Pune",
+        name: "Mumbai",
       },
       {
         id: 2,
-        name: "Banglore",
+        name: "Pune",
       },
       {
         id: 3,
-        name: "Kolkata",
+        name: "Banglore",
       },
       {
         id: 4,
+        name: "Kolkata",
+      },
+      {
+        id: 5,
         name: "Hydrabad",
       },
+      {
+        id: 6,
+        name: "Chennai"
+      },
+      {
+        id: 7,
+        name: "Ahmedabad"
+      },
+      {
+        id: 8,
+        name: "Visakhapatnam"
+      },
+      {
+        id: 9,
+        name: "Vadodara"
+      },
+      {
+        id: 10,
+        name: "Bhopal"
+      },
+      {
+        id: 11,
+        name: "Lucknow"
+      },
+      {
+        id: 12,
+        name: "Indore"
+      },
+      {
+        id: 13,
+        name: "Surat"
+      },
+      {
+        id: 14,
+        name: "Jaipur"
+      },
+      {
+        id: 15,
+        name: "Patna"
+      }
     ],
   });
 

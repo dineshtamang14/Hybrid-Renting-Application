@@ -15,6 +15,13 @@ const CategoryForDesktop = (props) => {
     names: [
       {
         id: 0,
+        fullIcon: (
+          <MaterialIcons style={styles.catIcon} name="category" size={24} color="black" />
+        ),
+        name: "All"
+      },
+      {
+        id: 1,
 
         fullIcon: (
           <Entypo style={styles.catIcon} name="home" size={24} color="black" />
@@ -22,7 +29,7 @@ const CategoryForDesktop = (props) => {
         name: "Apartment",
       },
       {
-        id: 1,
+        id: 2,
         fullIcon: (
           <Ionicons
             style={styles.catIcon}
@@ -34,7 +41,7 @@ const CategoryForDesktop = (props) => {
         name: "Vehicle",
       },
       {
-        id: 2,
+        id: 3,
         fullIcon: (
           <MaterialIcons
             style={styles.catIcon}
@@ -46,14 +53,14 @@ const CategoryForDesktop = (props) => {
         name: "Household Items",
       },
       {
-        id: 3,
+        id: 4,
         fullIcon: (
           <Entypo style={styles.catIcon} name="book" size={24} color="black" />
         ),
         name: "Books",
       },
       {
-        id: 4,
+        id: 5,
         fullIcon: (
           <AntDesign
             style={styles.catIcon}
@@ -64,6 +71,27 @@ const CategoryForDesktop = (props) => {
         ),
         name: "Office Equipment",
       },
+      {
+        id: 6,
+        fullIcon: (
+          <MaterialIcons style={styles.catIcon} name="laptop-mac" size={24} color="black" />
+        ),
+        name: "Laptop"
+      },
+      {
+        id: 7,
+        fullIcon: (
+          <AntDesign style={styles.catIcon} name="mobile1" size={24} color="black" />
+        ),
+        name: "Mobile"
+      },
+      {
+        id: 8,
+        fullIcon: (
+          <Ionicons style={styles.catIcon} name="fast-food" size={24} color="black" />
+        ),
+        name: "Eatable items"
+      }
     ],
   });
 

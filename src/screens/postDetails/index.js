@@ -103,7 +103,7 @@ const PostDetails = () => {
                 <Image
                   source={{
                     uri:
-                      "https://d3qz0eunla69v9.cloudfront.net/fit-in/500x500/public/" +
+                      "https://dtjhbqhj69dt.cloudfront.net/fit-in/500x500/public/" +
                       images[index].imageUrl,
                   }}
                   style={{

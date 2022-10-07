@@ -3,7 +3,7 @@ import HeaderForMobile from '../../components/headerForMobile';
 import PostItems from "../../components/postItems";
 import { API } from "aws-amplify";
 import { getListingByCreatedAt, searchListings } from "../../graphql/queries";
-import { FlatList, Dimensions, View, RefreshControl } from "react-native";
+import { FlatList, Dimensions, View, RefreshControl, Platform } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderForDesktop from "../../components/headerForDesktop";
 import CategoryForDesktop from "../../components/categoryForDesktop";
@@ -241,6 +241,17 @@ const Home = () => {
     }
   }, [searchByCategory]);
 
+  const setData = async () => {
+    if(!Platform.OS === "web"){
+      setNewItems(JSON.parse(await AsyncStorage.getItem("rent-data")));
+    }
+  }
+
+  const getData = async () => {
+    const value = JSON.parse(await AsyncStorage.getItem("rent-data"));
+    return value;
+  }
+
   const fetchAll = async () => {
     try {
       const itemListByCommonID = await API.graphql({
@@ -250,15 +261,23 @@ const Home = () => {
       });
 
       setNewItems(itemListByCommonID.data.getListingByCreatedAt.items);
-      await AsynStorage.setItem("rent-data", JSON.stringify(newItems));
-      console.log("local storage: ", JSON.parse(await AsyncStorage.getItem("rent-data")));
+      if(!Platform.OS === "web"){
+        await AsyncStorage.setItem("rent-data", JSON.stringify(newItems));
+      }
       // console.log(newItems)
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
-    fetchAll();
+    if(Platform.OS === "web"){
+      fetchAll();
+    }
+    if(!getData()){
+      fetchAll();
+    } else {
+      setData();
+    }
   }, []);
 
   const pulldata = async () => {

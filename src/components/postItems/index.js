@@ -16,7 +16,7 @@ const PostItems = (props) => {
           });
         }} style={styles.container}>
           <View style={styles.postWrap}>
-          <Image source={{uri: "https://d3qz0eunla69v9.cloudfront.net/fit-in/400x400/public/" + images[0].imageUrl}} style={styles.postImage}></Image>
+          <Image source={{uri: "https://dtjhbqhj69dt.cloudfront.net/fit-in/400x400/public/" + images[0].imageUrl}} style={styles.postImage}></Image>
           <View style={styles.postContainWrap}>
             <View>
               <Text style={styles.postTitle}>{singlePost.title}</Text>

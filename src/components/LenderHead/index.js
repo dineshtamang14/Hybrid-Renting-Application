@@ -43,7 +43,7 @@ const LenderHeadScreen = (props) => {
           <Image
             source={{
               uri:
-                "https://d3qz0eunla69v9.cloudfront.net/fit-in/400x400/public/" +
+                "https://dtjhbqhj69dt.cloudfront.net/fit-in/400x400/public/" +
                 images[0].imageUrl,
             }}
             style={styles.postImage}></Image>
