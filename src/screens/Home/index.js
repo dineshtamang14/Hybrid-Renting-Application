@@ -3,7 +3,8 @@ import HeaderForMobile from '../../components/headerForMobile';
 import PostItems from "../../components/postItems";
 import { API } from "aws-amplify";
 import { getListingByCreatedAt, searchListings } from "../../graphql/queries";
-import { FlatList, Dimensions, View, ScrollView, RefreshControl } from "react-native";
+import { FlatList, Dimensions, View, RefreshControl } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderForDesktop from "../../components/headerForDesktop";
 import CategoryForDesktop from "../../components/categoryForDesktop";
 import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
@@ -249,6 +250,8 @@ const Home = () => {
       });
 
       setNewItems(itemListByCommonID.data.getListingByCreatedAt.items);
+      await AsynStorage.setItem("rent-data", JSON.stringify(newItems));
+      console.log("local storage: ", JSON.parse(await AsyncStorage.getItem("rent-data")));
       // console.log(newItems)
     } catch (err) {
       console.log(err);
