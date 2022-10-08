@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Auth, API } from "aws-amplify";
-import { View, FlatList, Text, Alert } from "react-native";
+import { View, FlatList, Text, Platform } from "react-native";
 import { listRentOrders } from "../../graphql/queries";
 import BorrowerHeadScreen from "../../components/BorrowerHead";
-import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const BorrowerScreen = () => {
   const [newItems, setNewItems] = useState([]);
@@ -11,7 +11,6 @@ const BorrowerScreen = () => {
   const [email, setEmail] = useState("");
   const [dataPresent, setDataPresent] = useState(true);
   const [substrEmail, setSubStrEmail] = useState("");
-  const navigation = useNavigation();
 
   const checkUser = () => {
     Auth.currentAuthenticatedUser()
@@ -48,7 +47,12 @@ const BorrowerScreen = () => {
     }
       const data = newItems.length > 0 ? true : false;
       if(!data){
-        fetchAll();
+        AsyncStorage.getItem("borrow-data").then(value => {
+          setNewItems(JSON.parse(value));
+        });
+        if(Platform.OS === "web"){
+          fetchAll();
+        }
       }
       setDataPresent(data);
   });

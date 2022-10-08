@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 const BorrowerHeadScreen = (props) => {
   const navigation = useNavigation();
   const singlePost = props.BorrowerHead;
+  console.log("singlePost: ", singlePost);
   const [images, setimages] = useState(JSON.parse(singlePost.listing.images));
 
   return (

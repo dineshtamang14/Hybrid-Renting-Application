@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import HeaderForMobile from '../../components/headerForMobile';
 import PostItems from "../../components/postItems";
-import { API } from "aws-amplify";
-import { getListingByCreatedAt, searchListings } from "../../graphql/queries";
+import { API, Auth } from "aws-amplify";
+import { getListingByCreatedAt, searchListings, listRentOrders } from "../../graphql/queries";
 import { FlatList, Dimensions, View, RefreshControl, Platform } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import HeaderForDesktop from "../../components/headerForDesktop";
@@ -14,6 +14,7 @@ const Home = () => {
   const route = useRoute();
   const [searchText, setSearchText] = useState("");
   const [refresh, setRefresh] = useState(false);
+  const [userID, setUserID] = useState("");
   const [searchByLocation, setSearchByLocation] = useState({
     locationName: "All",
     locationId: "",
@@ -264,17 +265,80 @@ const Home = () => {
     }
   };
 
+  const checkUser = () => {
+    Auth.currentAuthenticatedUser()
+    .then((user) => {
+      setUserID(user.attributes.sub);
+    })
+    .catch((err) => {
+      console.log(err);
+      throw err;
+    });
+  }
+
+  const fetchBorrow = async () => {
+    try {
+      const orderList = await API.graphql({
+        query: listRentOrders,
+        variables: {
+          filter: {
+            borrowerUserId: { eq: userID },
+          },
+        },
+      });
+      try {
+        if(Platform.OS !== "web"){
+          await AsyncStorage.setItem("borrow-data", JSON.stringify(orderList.data.listRentOrders.items));
+        }
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const fetchLender = async () => {
+    try {
+      const orderList = await API.graphql({
+        query: listRentOrders,
+        variables: {
+          filter: {
+            lenderUserID: { eq: userID },
+          },
+        },
+      });
+      try {
+        if(Platform.OS !== "web"){
+          await AsyncStorage.setItem("lender-data", JSON.stringify(orderList.data.listRentOrders.items));
+        }
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   useEffect(() => {
     if(Platform.OS === "web"){
       fetchAll();
+    } else {
+      checkUser();
     }
     try {
       AsyncStorage.getItem("rent-data").then(value => {
         if(value === null){
           fetchAll();
-        } else {
-          setNewItems(JSON.parse(value));
+          if(userID){
+            fetchBorrow();
+            fetchLender();
+          }
         }
+          setNewItems(JSON.parse(value));
       })
     } catch (err) {
       console.error(err);
@@ -284,6 +348,10 @@ const Home = () => {
 
   const pulldata = async () => {
     await fetchAll();
+    if(userID){
+      await fetchBorrow();
+      await fetchLender();
+    }
     setRefresh(false);
   }
 
