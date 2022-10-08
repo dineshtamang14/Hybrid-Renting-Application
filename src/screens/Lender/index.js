@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Auth, API } from "aws-amplify";
-import { View, FlatList, Text, Alert } from "react-native";
+import { View, FlatList, Text, Platform } from "react-native";
 import { listRentOrders } from "../../graphql/queries";
 import LenderHeadScreen from "../../components/LenderHead";
-import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LenderScreen = () => {
-  const navigation = useNavigation();
   const [newItems, setNewItems] = useState([]);
   const [userID, setUserID] = useState("");
   const [email, setEmail] = useState("");
@@ -50,7 +49,12 @@ const LenderScreen = () => {
     }
       const data = newItems.length > 0 ? true : false;
       if(!data){
-        fetchAll();
+        AsyncStorage.getItem("lender-data").then(value => {
+          setNewItems(JSON.parse(value));
+        });
+        if(Platform.OS === "web"){
+          fetchAll();
+        }
       }
       setDataPresent(data);
   });
