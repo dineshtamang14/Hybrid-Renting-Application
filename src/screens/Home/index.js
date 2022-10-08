@@ -280,7 +280,7 @@ const Home = () => {
       console.error(err);
       throw err;
     }
-  }, []);
+  });
 
   const pulldata = async () => {
     await fetchAll();
