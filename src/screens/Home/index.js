@@ -241,16 +241,6 @@ const Home = () => {
     }
   }, [searchByCategory]);
 
-  const deleteData = async () => {
-    try {
-      // await AsyncStorage.removeItem("rent-data");
-      await AsyncStorage.clear();
-    } catch (err) {
-      console.error(err);
-      throw err;
-    }
-  }
-
   const fetchAll = async () => {
     try {
       const itemListByCommonID = await API.graphql({
@@ -293,12 +283,12 @@ const Home = () => {
   }, []);
 
   const pulldata = async () => {
-    await deleteData();
     await fetchAll();
     setRefresh(false);
   }
 
-  const pull = () => {
+  const pull = async () => {
+    // await deleteData();
     setRefresh(true);
     pulldata();
   }

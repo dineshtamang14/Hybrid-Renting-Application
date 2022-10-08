@@ -14,7 +14,7 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import HeaderForDesktop from "../../components/headerForDesktop";
 import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
 import { API, Auth } from "aws-amplify";
-import { createRentOrder } from "../../graphql/mutations";
+import { createRentOrder, deleteListing, deleteRentOrder } from "../../graphql/mutations";
 
 
 const PostDetails = () => {

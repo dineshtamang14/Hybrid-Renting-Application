@@ -5,6 +5,7 @@ import Home from "../screens/Home";
 import Listing from "../screens/Listing";
 import { Dimensions } from "react-native";
 import LendBorrowerNavScreen from "./LendBorrNav";
+import Profile from "../components/profile";
 
 const BottomTabNav = () => {
     const windowWidth = Number(Dimensions.get("window").width);
@@ -36,10 +37,11 @@ const BottomTabNav = () => {
             ),
             headerShown: false,
         }} />
-                <Tab.Screen name={"Profile"} component={Home} options={{
+                <Tab.Screen name={"Profile"} component={Profile} options={{
             tabBarIcon: ({color}) => (
                 <FontAwesome name="user-circle" size={24} color="black" />
             ),
+            headerShown: false,
         }} />
     </Tab.Navigator>
   );
