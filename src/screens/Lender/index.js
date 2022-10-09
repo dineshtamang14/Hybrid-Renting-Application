@@ -37,6 +37,9 @@ const LenderScreen = () => {
       });
 
       setNewItems(orderList.data.listRentOrders.items);
+      if(Platform.OS !== 'web'){
+        await AsyncStorage.setItem("lender-data", JSON.stringify(orderList.data.listRentOrders.items));
+      }
     } catch (err) {
       console.error(err);
       throw err;
@@ -48,14 +51,17 @@ const LenderScreen = () => {
       checkUser();
     }
       const data = newItems.length > 0 ? true : false;
+      if(Platform.OS === "web"){
+        fetchAll();
+      } else {
       if(!data){
         AsyncStorage.getItem("lender-data").then(value => {
+          if(value === null){
+            fetchAll();
+          }
           setNewItems(JSON.parse(value));
         });
-        if(Platform.OS === "web"){
-          fetchAll();
-        }
-      }
+      }}
       setDataPresent(data);
   });
 

@@ -37,6 +37,9 @@ const BorrowerScreen = () => {
       });
 
       setNewItems(orderList.data.listRentOrders.items);
+      if(Platform.OS !== 'web'){
+        await AsyncStorage.setItem("borrow-data", JSON.stringify(orderList.data.listRentOrders.items));
+      }
     } catch (err) {
       console.log(err);
     }
@@ -47,13 +50,16 @@ const BorrowerScreen = () => {
     }
       const data = newItems.length > 0 ? true : false;
       if(!data){
-        AsyncStorage.getItem("borrow-data").then(value => {
-          setNewItems(JSON.parse(value));
-        });
         if(Platform.OS === "web"){
           fetchAll();
-        }
-      }
+        } else {
+        AsyncStorage.getItem("borrow-data").then(value => {
+          if(value === null){
+            fetchAll();
+          }
+          setNewItems(JSON.parse(value));
+        });
+      }}
       setDataPresent(data);
   });
 

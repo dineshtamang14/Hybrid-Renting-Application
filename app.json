@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rent",
-    "slug": "rent",
+    "name": "rental",
+    "slug": "rental",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/adaptive-icon.png",
@@ -29,6 +29,11 @@
     },
     "web": {
       "favicon": "./assets/adaptive-icon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "526a28b3-b605-4990-b965-1520b56ee289"
+      }
     }
   }
 }
