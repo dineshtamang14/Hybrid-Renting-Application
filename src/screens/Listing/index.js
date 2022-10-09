@@ -27,6 +27,7 @@ const Listing = () => {
     const [userEmail, setUserEmail] = useState("");
     const [postProcessing, setPostProcessing] = useState(false);
     const [postSuccess, setPostSuccess] = useState(""); 
+    const [update, setUpdate] = useState();
     const [user, setUser] = useState(undefined);
 
     //const [image, setImage] = useState(null);
@@ -59,17 +60,9 @@ const Listing = () => {
         }
     }, [postSuccess])
 
-    const checkUser = async () => {
-        try {
-            const authUser = await Auth.currentAuthenticatedUser({bypassCache: true})
-            setUser(authUser);
-            // console.log("this is the user: ", authUser);   
-        } catch (err) {
-            
-        }
-    }
-    Auth.currentAuthenticatedUser({bypassCache: true})
+    Auth.currentAuthenticatedUser()
         .then((user) => {
+            console.log("user data: ", user.attributes);
             setUserID(user.attributes.sub);
             setUserEmail(user.attributes.email);
         })
@@ -78,8 +71,78 @@ const Listing = () => {
             throw err;
         })
 
+    const updateImageAllUrl = [];
+    const updateDetails = () => {
+        setPostProcessing(true);
+        imageData && imageData.map( async(component, index) => {
+            const imageUrl = component.uri;
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            if (Platform.OS === "web") {
+                const contentType = blob.type;
+                const extension = contentType.split("/")[1];
+                var key = `${uuidv4()}.${extension}`;
+              } else {
+                const urlParts = imageUrl.split(".");
+                const extension = urlParts[urlParts.length - 1];
+                var key = `${uuidv4()}.${extension}`;
+              }
+      
+            updateImageAllUrl.push({imageUrl:key});
+            await Storage.put(key, blob);
+            
+            if(imageData.length == index+1){
+                const postData = {
+                    title: title,
+                    categoryName: category.catName,
+                    categoryID: category.catID,
+                    description: description,
+                    images: JSON.stringify(imageAllUrl),
+                    locationID: location.locID,
+                    locationName: location.locName,
+                    owner: userEmail,
+                    rentValue: rentValue,
+                    userID: userID,
+                    commonID: "1"
+                }
+
+                await API.graphql({
+                    query: createListing,
+                    variables: { input: postData },
+                    authMode: "AMAZON_COGNITO_USER_POOLS",
+                  });
+                  setImageData([]);
+                  if (Platform.OS === "web") {
+                    setPostProcessing(false);
+                    alert("Your adv have successfully published.")
+                    navigation.navigate("Home", { screen: "Explore"});
+                  } else {
+                    setPostProcessing(false);
+                    setPostSuccess("Your adv have successfully published.");
+                    navigation.navigate("Home", { screen: "Explore"});
+                  }
+            }
+        })
+    }
+
+    const updateData = ()=> {
+        setUserID(route.params.editData.userID);
+        setUserEmail(route.params.editData.owner);
+        setCategory({catID: route.params.editData.categoryID, catName: route.params.editData.categoryName});
+        setLocation({locID: route.params.editData.locationID, locName: route.params.editData.locationName});
+        setTitle(route.params.editData.title);
+        setDescription(route.params.editData.description);
+        setRentValue(route.params.editData.rentValue);
+    }
+
         useEffect(() => {
-            checkUser();
+        if(!route.params){
+            setUpdate(false);
+        } else if(route.params.editData !== undefined){
+            setUpdate(true);
+            updateData();
+            // console.log("data exists: ", route.params.editData);
+        }
         if(!route.params){
             console.log("There is no data in route");
         } else {
@@ -92,6 +155,7 @@ const Listing = () => {
             }
         }
     })
+
     const imageAllUrl = [];
     const storeToDB = async () => {
         setPostProcessing(true);
@@ -228,11 +292,18 @@ const Listing = () => {
                     <TextInput placeholder="Add a value" style={{ marginLeft: 5, width: "100%", outline: Platform.OS === "web" && "none" }} onChangeText={(text) => setRentValue(text)} keyboardType="number-pad" />
                 </View>
 
+                {update ? 
+                    <Pressable style={styles.post_adv} onPress={() => {
+                    updateDetails();
+                }} android_ripple={{color: "grey"}}>
+                    <Text style={styles.post_adv_text}>{postProcessing ? "Processing..." : "UPDATE ADV"}</Text>
+                </Pressable> :
                 <Pressable style={styles.post_adv} onPress={() => {
                     storeToDB()
                 }} android_ripple={{color: "grey"}}>
                     <Text style={styles.post_adv_text}>{postProcessing ? "Processing..." : "POST ADV"}</Text>
                 </Pressable>
+                }
             </ScrollView>
             <MenuDetailsForDesktop menuToggle={menuToggle} top={59} right={"9.3%"} />
         </View>

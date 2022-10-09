@@ -32,6 +32,8 @@ const checkUser = async () => {
     if(signIn){
       Auth.signOut();
       setSignIn(false);
+      setEmail("");
+      setCurrentUser("");
       Alert.alert("your sign out successfully");
       navigation.navigate("Home", { screen: "Explore" });
     } else {

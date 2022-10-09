@@ -67,6 +67,14 @@ const PostDetails = () => {
     }
   }, [postSuccess]);
 
+  const editDetails = async () => {
+    if(userID){
+      navigation.navigate("Listing", { editData: route.params.postInfo });
+    } else {
+      Alert.alert("please login");
+    }
+  }
+
   const orderToDB = async () => {
     if(logged){
       const postData = {
@@ -236,7 +244,7 @@ const PostDetails = () => {
           </View>
         </ScrollView>
       </View>
-      {showOrder && 
+      {showOrder ?
         <TouchableOpacity
         onPress={orderToDB}
         style={{
@@ -254,6 +262,25 @@ const PostDetails = () => {
             elevation: 5,
           }}>
           ORDER
+        </Text>
+        </TouchableOpacity>:
+        <TouchableOpacity
+        onPress={editDetails}
+        style={{
+          position: "absolute",
+          bottom: 10,
+          right: windowWidth > 800 ? "15%" : "40%",
+        }}>
+        <Text
+          style={{
+            backgroundColor: colors.secondary,
+            paddingHorizontal: 20,
+            paddingVertical: 10,
+            borderRadius: 50,
+            color: colors.white,
+            elevation: 5,
+          }}>
+          Edit
         </Text>
         </TouchableOpacity>
       }
