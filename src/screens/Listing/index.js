@@ -8,7 +8,7 @@ import {  useNavigation, useRoute } from "@react-navigation/native"
 import React, { useEffect, useState } from 'react';
 import "react-native-get-random-values"
 import {v4 as uuidv4} from "uuid";
-import { createListing } from "../../graphql/mutations";
+import { createListing, updateListing } from "../../graphql/mutations";
 import HeaderForDesktop from "../../components/headerForDesktop";
 import MenuDetailsForDesktop from "../../components/menuDetailsForDesktop";
 import * as ImagePicker from "expo-image-picker";
@@ -62,7 +62,6 @@ const Listing = () => {
 
     Auth.currentAuthenticatedUser()
         .then((user) => {
-            console.log("user data: ", user.attributes);
             setUserID(user.attributes.sub);
             setUserEmail(user.attributes.email);
         })
@@ -92,7 +91,7 @@ const Listing = () => {
             await Storage.put(key, blob);
             
             if(imageData.length == index+1){
-                const postData = {
+                const editData = {
                     title: title,
                     categoryName: category.catName,
                     categoryID: category.catID,
@@ -107,8 +106,8 @@ const Listing = () => {
                 }
 
                 await API.graphql({
-                    query: createListing,
-                    variables: { input: postData },
+                    query: updateListing,
+                    variables: { input: editData, condition: route.params.editData.id },
                     authMode: "AMAZON_COGNITO_USER_POOLS",
                   });
                   setImageData([]);
@@ -275,7 +274,9 @@ const Listing = () => {
                         outline: Platform.OS === "web" && "none",
                     }} onChangeText={(text) => {
                         setTitle(text)
-                    }} />
+                    }} 
+                        value={title}
+                    />
                 </View>
                 <View style={styles.inputText}>
                     <MaterialIcons name="description" size={24} color={colors.secondary} />
@@ -285,11 +286,15 @@ const Listing = () => {
                         outline: Platform.OS === "web" && "none",
                         }} onChangeText={(text) => {
                         setDescription(text)
-                    }} multiline={true} numberOfLines={3} />
+                    }} multiline={true} numberOfLines={3} 
+                        value={description}
+                    />
                 </View>
                 <View style={[styles.inputText, { width: "50%" }]}>
                     <FontAwesome name="rupee" size={24} color={colors.secondary} />
-                    <TextInput placeholder="Add a value" style={{ marginLeft: 5, width: "100%", outline: Platform.OS === "web" && "none" }} onChangeText={(text) => setRentValue(text)} keyboardType="number-pad" />
+                    <TextInput placeholder="Add a value" style={{ marginLeft: 5, width: "100%", outline: Platform.OS === "web" && "none" }} onChangeText={(text) => setRentValue(text)} keyboardType="number-pad" 
+                        value={rentValue}
+                    />
                 </View>
 
                 {update ? 
