@@ -8,6 +8,7 @@ import {
   Pressable,
   Platform,
   Alert,
+  TouchableOpacity
 } from "react-native";
 import { colors } from "../../modal/color";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -236,7 +237,7 @@ const PostDetails = () => {
         </ScrollView>
       </View>
       {showOrder && 
-        <Pressable
+        <TouchableOpacity
         onPress={orderToDB}
         style={{
           position: "absolute",
@@ -254,7 +255,7 @@ const PostDetails = () => {
           }}>
           ORDER
         </Text>
-      </Pressable>
+        </TouchableOpacity>
       }
       <MenuDetailsForDesktop menuToggle={menuToggle} top={59} right={"7.8%"} />
     </View>

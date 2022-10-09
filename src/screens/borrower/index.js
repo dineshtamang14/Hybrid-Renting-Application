@@ -13,7 +13,7 @@ const BorrowerScreen = () => {
   const [substrEmail, setSubStrEmail] = useState("");
 
   const checkUser = () => {
-    Auth.currentAuthenticatedUser()
+    Auth.currentAuthenticatedUser({bypassCache: true})
     .then((user) => {
       setUserID(user.attributes.sub);
       setEmail(user.attributes.email);
@@ -48,6 +48,8 @@ const BorrowerScreen = () => {
     if(!userID) {
       checkUser();
     }
+
+    if(userID){
       const data = newItems.length > 0 ? true : false;
       if(!data){
         if(Platform.OS === "web"){
@@ -56,11 +58,13 @@ const BorrowerScreen = () => {
         AsyncStorage.getItem("borrow-data").then(value => {
           if(value === null){
             fetchAll();
+          } else {
+            setNewItems(JSON.parse(value));
           }
-          setNewItems(JSON.parse(value));
         });
       }}
       setDataPresent(data);
+    }
   });
 
   return (

@@ -26,7 +26,8 @@ const Listing = () => {
     const [userID, setUserID] = useState("");
     const [userEmail, setUserEmail] = useState("");
     const [postProcessing, setPostProcessing] = useState(false);
-    const [postSuccess, setPostSuccess] = useState("");
+    const [postSuccess, setPostSuccess] = useState(""); 
+    const [user, setUser] = useState(undefined);
 
     //const [image, setImage] = useState(null);
     const pickImage = async () => {
@@ -58,7 +59,16 @@ const Listing = () => {
         }
     }, [postSuccess])
 
-    Auth.currentAuthenticatedUser()
+    const checkUser = async () => {
+        try {
+            const authUser = await Auth.currentAuthenticatedUser({bypassCache: true})
+            setUser(authUser);
+            // console.log("this is the user: ", authUser);   
+        } catch (err) {
+            
+        }
+    }
+    Auth.currentAuthenticatedUser({bypassCache: true})
         .then((user) => {
             setUserID(user.attributes.sub);
             setUserEmail(user.attributes.email);
@@ -69,6 +79,7 @@ const Listing = () => {
         })
 
         useEffect(() => {
+            checkUser();
         if(!route.params){
             console.log("There is no data in route");
         } else {

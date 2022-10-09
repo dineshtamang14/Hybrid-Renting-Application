@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Auth, API } from "aws-amplify";
-import { View, FlatList, Text, Platform } from "react-native";
+import { View, FlatList, Text, Platform, Alert } from "react-native";
 import { listRentOrders } from "../../graphql/queries";
 import LenderHeadScreen from "../../components/LenderHead";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,7 +13,7 @@ const LenderScreen = () => {
   const [substrEmail, setSubStrEmail] = useState("");
 
   const checkUser = () => {
-    Auth.currentAuthenticatedUser()
+    Auth.currentAuthenticatedUser({bypassCache: true})
     .then((user) => {
       setUserID(user.attributes.sub);
       setEmail(user.attributes.email);
@@ -21,7 +21,6 @@ const LenderScreen = () => {
     })
     .catch((err) => {
       console.log(err);
-      throw err;
     });
   }
 
@@ -50,6 +49,8 @@ const LenderScreen = () => {
     if(!userID) {
       checkUser();
     }
+
+    if(userID){
       const data = newItems.length > 0 ? true : false;
       if(Platform.OS === "web"){
         fetchAll();
@@ -58,11 +59,13 @@ const LenderScreen = () => {
         AsyncStorage.getItem("lender-data").then(value => {
           if(value === null){
             fetchAll();
+          } else {
+            setNewItems(JSON.parse(value));
           }
-          setNewItems(JSON.parse(value));
         });
       }}
       setDataPresent(data);
+    }
   });
 
   return (

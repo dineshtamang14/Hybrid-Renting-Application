@@ -266,7 +266,7 @@ const Home = () => {
   };
 
   const checkUser = () => {
-    Auth.currentAuthenticatedUser()
+    Auth.currentAuthenticatedUser({bypassCache: true})
     .then((user) => {
       setUserID(user.attributes.sub);
     })
