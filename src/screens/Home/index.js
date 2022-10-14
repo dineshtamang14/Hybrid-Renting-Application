@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useKeepAwake } from 'expo-keep-awake';
 import HeaderForMobile from '../../components/headerForMobile';
 import PostItems from "../../components/postItems";
 import { API, Auth } from "aws-amplify";
@@ -362,6 +363,7 @@ const Home = () => {
   }
 
   const [menuToggle, setMenuToggle] = useState(false);
+  useKeepAwake();
 
   return (
     <>
